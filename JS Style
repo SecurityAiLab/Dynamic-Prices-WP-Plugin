@@ -1,0 +1,363 @@
+// Mapping of country codes to currency data
+var countryData = {
+  'AF': { currency: 'Afghani', symbol: '؋', standardRate: 0.37, exchangeRate: 83.00, thousandAbbreviation: 'K' },
+  'AL': { currency: 'Lek', symbol: 'L', standardRate: 0.60, exchangeRate: 100.80, thousandAbbreviation: 'mijë' },
+  'DZ': { currency: 'Dinar', symbol: 'د.ج', standardRate: 0.55, exchangeRate: 137.02, thousandAbbreviation: 'ألف' },
+  'AD': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'AO': { currency: 'Kwanza', symbol: 'Kz', standardRate: 0.45, exchangeRate: 827.84, thousandAbbreviation: 'mil' },
+  'AG': { currency: 'East Caribbean Dollar', symbol: '$', standardRate: 1.15, exchangeRate: 2.70, thousandAbbreviation: 'K' },
+  'AR': { currency: 'Argentine Peso', symbol: '$', standardRate: 0.35, exchangeRate: 349.00, thousandAbbreviation: 'mil' },
+  'AM': { currency: 'Dram', symbol: '֏', standardRate: 0.62, exchangeRate: 387.53, thousandAbbreviation: 'հազար' },
+  'AU': { currency: 'Australian Dollar', symbol: 'A$', standardRate: 1.10, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'AT': { currency: 'Euro', symbol: '€', standardRate: 1.15, exchangeRate: 0.94, thousandAbbreviation: 'Tsd.' },
+  'AZ': { currency: 'Manat', symbol: '₼', standardRate: 0.72, exchangeRate: 1.70, thousandAbbreviation: 'min' },
+  'BS': { currency: 'Bahamian Dollar', symbol: '$', standardRate: 1.25, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'BH': { currency: 'Bahraini Dinar', symbol: '.د.ب', standardRate: 1.30, exchangeRate: 0.38, thousandAbbreviation: 'ألف' },
+  'BD': { currency: 'Taka', symbol: '৳', standardRate: 0.50, exchangeRate: 110.25, thousandAbbreviation: 'হাজার' },
+  'BB': { currency: 'Barbadian Dollar', symbol: '$', standardRate: 1.05, exchangeRate: 2.00, thousandAbbreviation: 'K' },
+  'BY': { currency: 'Belarusian Ruble', symbol: 'Br', standardRate: 0.50, exchangeRate: 3.17, thousandAbbreviation: 'тыс.' },
+  'BE': { currency: 'Euro', symbol: '€', standardRate: 1.10, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'BZ': { currency: 'Belize Dollar', symbol: 'BZ$', standardRate: 0.85, exchangeRate: 2.00, thousandAbbreviation: 'K' },
+  'BJ': { currency: 'West African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'BT': { currency: 'Ngultrum', symbol: 'Nu.', standardRate: 0.50, exchangeRate: 84.03, thousandAbbreviation: 'བཅུ་སྐོར' },
+  'BO': { currency: 'Boliviano', symbol: 'Bs', standardRate: 0.43, exchangeRate: 6.87, thousandAbbreviation: 'mil' },
+  'BA': { currency: 'Convertible Mark', symbol: 'KM', standardRate: 0.55, exchangeRate: 1.83, thousandAbbreviation: 'hiljada' },
+  'BW': { currency: 'Pula', symbol: 'P', standardRate: 0.62, exchangeRate: 14.20, thousandAbbreviation: 'K' },
+  'BR': { currency: 'Brazilian Real', symbol: 'R$', standardRate: 0.75, exchangeRate: 5.00, thousandAbbreviation: 'mil' },
+  'BN': { currency: 'Brunei Dollar', symbol: 'B$', standardRate: 1.10, exchangeRate: 1.36, thousandAbbreviation: 'K' },
+  'BG': { currency: 'Lev', symbol: 'лв', standardRate: 0.60, exchangeRate: 1.80, thousandAbbreviation: 'хил.' },
+  'BF': { currency: 'West African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'BI': { currency: 'Burundian Franc', symbol: 'FBu', standardRate: 0.25, exchangeRate: 2830.00, thousandAbbreviation: 'mille' },
+  'CV': { currency: 'Cape Verdean Escudo', symbol: '$', standardRate: 0.50, exchangeRate: 103.00, thousandAbbreviation: 'mil' },
+  'KH': { currency: 'Riel', symbol: '៛', standardRate: 0.30, exchangeRate: 4060.00, thousandAbbreviation: 'ម៉ឺន' },
+  'CM': { currency: 'Central African CFA Franc', symbol: 'CFA', standardRate: 0.40, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'CA': { currency: 'Canadian Dollar', symbol: 'C$', standardRate: 1.10, exchangeRate: 1.36, thousandAbbreviation: 'K' },
+  'CF': { currency: 'Central African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'TD': { currency: 'Central African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'CL': { currency: 'Chilean Peso', symbol: '$', standardRate: 0.70, exchangeRate: 885.00, thousandAbbreviation: 'mil' },
+  'CN': { currency: 'Yuan Renminbi', symbol: '¥', standardRate: 0.65, exchangeRate: 7.30, thousandAbbreviation: '千' },
+  'CO': { currency: 'Colombian Peso', symbol: '$', standardRate: 0.50, exchangeRate: 4200.00, thousandAbbreviation: 'mil' },
+  'KM': { currency: 'Comorian Franc', symbol: 'CF', standardRate: 0.30, exchangeRate: 445.00, thousandAbbreviation: 'mille' },
+  'CD': { currency: 'Congolese Franc', symbol: 'FC', standardRate: 0.25, exchangeRate: 2475.00, thousandAbbreviation: 'mille' },
+  'CG': { currency: 'Central African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'CR': { currency: 'Costa Rican Colón', symbol: '₡', standardRate: 0.55, exchangeRate: 537.00, thousandAbbreviation: 'mil' },
+  'HR': { currency: 'Euro', symbol: '€', standardRate: 0.75, exchangeRate: 0.94, thousandAbbreviation: 'Tsd.' },
+  'CU': { currency: 'Cuban Peso', symbol: '$', standardRate: 0.35, exchangeRate: 24.00, thousandAbbreviation: 'mil' },
+  'CY': { currency: 'Euro', symbol: '€', standardRate: 1.05, exchangeRate: 0.94, thousandAbbreviation: 'χιλ' },
+  'CZ': { currency: 'Czech Koruna', symbol: 'Kč', standardRate: 0.80, exchangeRate: 23.00, thousandAbbreviation: 'tis.' },
+  'DK': { currency: 'Danish Krone', symbol: 'kr', standardRate: 1.20, exchangeRate: 7.05, thousandAbbreviation: 'tusind' },
+  'DJ': { currency: 'Djiboutian Franc', symbol: 'Fdj', standardRate: 0.40, exchangeRate: 177.50, thousandAbbreviation: 'mille' },
+  'DO': { currency: 'Dominican Peso', symbol: 'RD$', standardRate: 0.50, exchangeRate: 56.25, thousandAbbreviation: 'mil' },
+  'TL': { currency: 'US Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'EC': { currency: 'US Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'EG': { currency: 'Egyptian Pound', symbol: 'ج.م', standardRate: 0.45, exchangeRate: 30.90, thousandAbbreviation: 'ألف' },
+  'SV': { currency: 'US Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'GQ': { currency: 'Central African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'ER': { currency: 'Nakfa', symbol: 'Nkf', standardRate: 0.40, exchangeRate: 15.00, thousandAbbreviation: 'አንድ ሺህ' },
+  'EE': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'tuhat' },
+  'SZ': { currency: 'Lilangeni', symbol: 'E', standardRate: 0.55, exchangeRate: 17.53, thousandAbbreviation: 'K' },
+  'ET': { currency: 'Birr', symbol: 'Br', standardRate: 0.40, exchangeRate: 55.00, thousandAbbreviation: 'ሺህ' },
+  'FJ': { currency: 'Fijian Dollar', symbol: 'FJ$', standardRate: 0.65, exchangeRate: 2.30, thousandAbbreviation: 'K' },
+  'FI': { currency: 'Euro', symbol: '€', standardRate: 1.15, exchangeRate: 0.94, thousandAbbreviation: 'tuhat' },
+  'FR': { currency: 'Euro', symbol: '€', standardRate: 1.15, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'GA': { currency: 'Central African CFA Franc', symbol: 'CFA', standardRate: 0.40, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'GM': { currency: 'Dalasi', symbol: 'D', standardRate: 0.35, exchangeRate: 70.00, thousandAbbreviation: 'K' },
+  'GE': { currency: 'Lari', symbol: '₾', standardRate: 0.50, exchangeRate: 2.65, thousandAbbreviation: 'ათას' },
+  'DE': { currency: 'Euro', symbol: '€', standardRate: 1.10, exchangeRate: 0.94, thousandAbbreviation: 'Tsd.' },
+  'GH': { currency: 'Cedi', symbol: '₵', standardRate: 0.50, exchangeRate: 15.85, thousandAbbreviation: 'K' },
+  'GR': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'χιλ' },
+  'GD': { currency: 'East Caribbean Dollar', symbol: '$', standardRate: 1.05, exchangeRate: 2.70, thousandAbbreviation: 'K' },
+  'GT': { currency: 'Quetzal', symbol: 'Q', standardRate: 0.55, exchangeRate: 7.74, thousandAbbreviation: 'mil' },
+  'GN': { currency: 'Guinean Franc', symbol: 'FG', standardRate: 0.30, exchangeRate: 8637.13, thousandAbbreviation: 'mille' },
+  'GW': { currency: 'West African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'GY': { currency: 'Guyanese Dollar', symbol: 'G$', standardRate: 0.40, exchangeRate: 209.30, thousandAbbreviation: 'K' },
+  'HT': { currency: 'Gourde', symbol: 'G', standardRate: 0.25, exchangeRate: 132.00, thousandAbbreviation: 'mil' },
+  'HN': { currency: 'Lempira', symbol: 'L', standardRate: 0.45, exchangeRate: 24.96, thousandAbbreviation: 'mil' },
+  'HU': { currency: 'Forint', symbol: 'Ft', standardRate: 0.70, exchangeRate: 364.19, thousandAbbreviation: 'ezer' },
+  'IS': { currency: 'Icelandic Króna', symbol: 'kr', standardRate: 1.15, exchangeRate: 135.52, thousandAbbreviation: 'þúsund' },
+  'IN': { currency: 'Indian Rupee', symbol: '₹', standardRate: 0.35, exchangeRate: 84.03, thousandAbbreviation: 'हजार' },
+  'ID': { currency: 'Rupiah', symbol: 'Rp', standardRate: 0.30, exchangeRate: 15494.26, thousandAbbreviation: 'ribu' },
+  'IR': { currency: 'Iranian Rial', symbol: '﷼', standardRate: 0.25, exchangeRate: 42100.00, thousandAbbreviation: 'هزار' },
+  'IQ': { currency: 'Iraqi Dinar', symbol: 'ع.د', standardRate: 0.50, exchangeRate: 1310.53, thousandAbbreviation: 'ألف' },
+  'IE': { currency: 'Euro', symbol: '€', standardRate: 1.10, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'IL': { currency: 'New Israeli Shekel', symbol: '₪', standardRate: 1.05, exchangeRate: 3.80, thousandAbbreviation: 'אלף' },
+  'IT': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mila' },
+  'CI': { currency: 'West African CFA Franc', symbol: 'CFA', standardRate: 0.40, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'JM': { currency: 'Jamaican Dollar', symbol: 'J$', standardRate: 0.40, exchangeRate: 157.92, thousandAbbreviation: 'K' },
+  'JP': { currency: 'Yen', symbol: '¥', standardRate: 1.00, exchangeRate: 146.78, thousandAbbreviation: '千' },
+  'JO': { currency: 'Jordanian Dinar', symbol: 'د.أ', standardRate: 0.95, exchangeRate: 0.71, thousandAbbreviation: 'ألف' },
+  'KZ': { currency: 'Tenge', symbol: '₸', standardRate: 0.50, exchangeRate: 462.00, thousandAbbreviation: 'мың' },
+  'KE': { currency: 'Kenyan Shilling', symbol: 'KSh', standardRate: 0.45, exchangeRate: 129.05, thousandAbbreviation: 'K' },
+  'KI': { currency: 'Australian Dollar', symbol: 'A$', standardRate: 0.65, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'KP': { currency: 'North Korean Won', symbol: '₩', standardRate: 0.20, exchangeRate: 900.00, thousandAbbreviation: '천' },
+  'KR': { currency: 'South Korean Won', symbol: '₩', standardRate: 1.00, exchangeRate: 1350.00, thousandAbbreviation: '천' },
+  'KW': { currency: 'Kuwaiti Dinar', symbol: 'د.ك', standardRate: 1.35, exchangeRate: 0.31, thousandAbbreviation: 'ألف' },
+  'KG': { currency: 'Som', symbol: 'с', standardRate: 0.30, exchangeRate: 84.46, thousandAbbreviation: 'миң' },
+  'LA': { currency: 'Kip', symbol: '₭', standardRate: 0.25, exchangeRate: 18600.00, thousandAbbreviation: 'ພັນ' },
+  'LV': { currency: 'Euro', symbol: '€', standardRate: 0.95, exchangeRate: 0.94, thousandAbbreviation: 'tūkst.' },
+  'LB': { currency: 'Lebanese Pound', symbol: 'ل.ل', standardRate: 0.35, exchangeRate: 15000.00, thousandAbbreviation: 'ألف' },
+  'LS': { currency: 'Loti', symbol: 'L', standardRate: 0.50, exchangeRate: 17.53, thousandAbbreviation: 'K' },
+  'LR': { currency: 'Liberian Dollar', symbol: '$', standardRate: 0.30, exchangeRate: 185.50, thousandAbbreviation: 'K' },
+  'LY': { currency: 'Libyan Dinar', symbol: 'ل.د', standardRate: 0.50, exchangeRate: 4.76, thousandAbbreviation: 'ألف' },
+  'LI': { currency: 'Swiss Franc', symbol: 'CHF', standardRate: 1.25, exchangeRate: 0.85, thousandAbbreviation: 'Tsd.' },
+  'LT': { currency: 'Euro', symbol: '€', standardRate: 0.95, exchangeRate: 0.94, thousandAbbreviation: 'tūkst.' },
+  'LU': { currency: 'Euro', symbol: '€', standardRate: 1.20, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'MG': { currency: 'Malagasy Ariary', symbol: 'Ar', standardRate: 0.35, exchangeRate: 4540.00, thousandAbbreviation: 'arivo' },
+  'MW': { currency: 'Malawian Kwacha', symbol: 'MK', standardRate: 0.30, exchangeRate: 1220.00, thousandAbbreviation: 'K' },
+  'MY': { currency: 'Ringgit', symbol: 'RM', standardRate: 0.50, exchangeRate: 4.22, thousandAbbreviation: 'ribu' },
+  'MV': { currency: 'Maldivian Rufiyaa', symbol: 'ރ', standardRate: 0.65, exchangeRate: 15.40, thousandAbbreviation: 'މަދާލަ' },
+  'ML': { currency: 'West African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'MT': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'Tsd.' },
+  'MH': { currency: 'US Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'MR': { currency: 'Ouguiya', symbol: 'UM', standardRate: 0.40, exchangeRate: 37.50, thousandAbbreviation: 'ألف' },
+  'MU': { currency: 'Mauritian Rupee', symbol: 'Rs', standardRate: 0.50, exchangeRate: 46.37, thousandAbbreviation: 'K' },
+  'MX': { currency: 'Mexican Peso', symbol: '$', standardRate: 0.50, exchangeRate: 19.49, thousandAbbreviation: 'mil' },
+  'FM': { currency: 'US Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'MD': { currency: 'Moldovan Leu', symbol: 'L', standardRate: 0.40, exchangeRate: 17.88, thousandAbbreviation: 'mii' },
+  'MC': { currency: 'Euro', symbol: '€', standardRate: 1.20, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'MN': { currency: 'Tugrik', symbol: '₮', standardRate: 0.30, exchangeRate: 3457.00, thousandAbbreviation: 'мянга' },
+  'ME': { currency: 'Euro', symbol: '€', standardRate: 0.80, exchangeRate: 0.94, thousandAbbreviation: 'hiljada' },
+  'MA': { currency: 'Moroccan Dirham', symbol: 'د.م.', standardRate: 0.50, exchangeRate: 10.29, thousandAbbreviation: 'ألف' },
+  'MZ': { currency: 'Mozambican Metical', symbol: 'MT', standardRate: 0.35, exchangeRate: 64.63, thousandAbbreviation: 'mil' },
+  'MM': { currency: 'Kyat', symbol: 'K', standardRate: 0.25, exchangeRate: 3300.00, thousandAbbreviation: 'ကောင်' },
+  'NA': { currency: 'Namibian Dollar', symbol: 'N$', standardRate: 0.55, exchangeRate: 17.53, thousandAbbreviation: 'K' },
+  'NR': { currency: 'Australian Dollar', symbol: 'A$', standardRate: 1.00, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'NP': { currency: 'Nepalese Rupee', symbol: 'रू', standardRate: 0.35, exchangeRate: 134.48, thousandAbbreviation: 'हजार' },
+  'NL': { currency: 'Euro', symbol: '€', standardRate: 1.10, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'NZ': { currency: 'New Zealand Dollar', symbol: 'NZ$', standardRate: 1.05, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'NI': { currency: 'Córdoba', symbol: 'C$', standardRate: 0.45, exchangeRate: 36.43, thousandAbbreviation: 'mil' },
+  'NE': { currency: 'West African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'NG': { currency: 'Nigerian Naira', symbol: '₦', standardRate: 0.30, exchangeRate: 770.00, thousandAbbreviation: 'K' },
+  'MK': { currency: 'Macedonian Denar', symbol: 'ден', standardRate: 0.50, exchangeRate: 58.40, thousandAbbreviation: 'илјада' },
+  'NO': { currency: 'Norwegian Krone', symbol: 'kr', standardRate: 1.20, exchangeRate: 10.63, thousandAbbreviation: 'tusen' },
+  'OM': { currency: 'Omani Rial', symbol: 'ر.ع.', standardRate: 1.35, exchangeRate: 0.39, thousandAbbreviation: 'ألف' },
+  'PK': { currency: 'Pakistani Rupee', symbol: '₨', standardRate: 0.30, exchangeRate: 277.82, thousandAbbreviation: 'ہزار' },
+  'PW': { currency: 'US Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'PA': { currency: 'Balboa', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'mil' },
+  'PG': { currency: 'Kina', symbol: 'K', standardRate: 0.50, exchangeRate: 3.55, thousandAbbreviation: 'K' },
+  'PY': { currency: 'Paraguayan Guarani', symbol: 'Gs', standardRate: 0.40, exchangeRate: 7350.00, thousandAbbreviation: 'mil' },
+  'PE': { currency: 'Sol', symbol: 'S/.', standardRate: 0.55, exchangeRate: 3.70, thousandAbbreviation: 'mil' },
+  'PH': { currency: 'Philippine Peso', symbol: '₱', standardRate: 0.45, exchangeRate: 56.43, thousandAbbreviation: 'K' },
+  'PL': { currency: 'Zloty', symbol: 'zł', standardRate: 0.70, exchangeRate: 3.91, thousandAbbreviation: 'tys.' },
+  'PT': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'QA': { currency: 'Qatari Riyal', symbol: 'ر.ق', standardRate: 1.30, exchangeRate: 3.64, thousandAbbreviation: 'ألف' },
+  'RO': { currency: 'Leu', symbol: 'lei', standardRate: 0.70, exchangeRate: 4.52, thousandAbbreviation: 'mii' },
+  'RU': { currency: 'Russian Ruble', symbol: '₽', standardRate: 0.65, exchangeRate: 95.11, thousandAbbreviation: 'тыс.' },
+  'RW': { currency: 'Rwandan Franc', symbol: 'Fr', standardRate: 0.35, exchangeRate: 1230.00, thousandAbbreviation: 'ibihumbi' },
+  'KN': { currency: 'East Caribbean Dollar', symbol: '$', standardRate: 1.05, exchangeRate: 2.70, thousandAbbreviation: 'K' },
+  'LC': { currency: 'East Caribbean Dollar', symbol: '$', standardRate: 1.05, exchangeRate: 2.70, thousandAbbreviation: 'K' },
+  'VC': { currency: 'East Caribbean Dollar', symbol: '$', standardRate: 1.05, exchangeRate: 2.70, thousandAbbreviation: 'K' },
+  'WS': { currency: 'Tala', symbol: 'T', standardRate: 0.55, exchangeRate: 2.75, thousandAbbreviation: 'K' },
+  'SM': { currency: 'Euro', symbol: '€', standardRate: 1.20, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'ST': { currency: 'Dobra', symbol: 'Db', standardRate: 0.40, exchangeRate: 22.10, thousandAbbreviation: 'mil' },
+  'SA': { currency: 'Saudi Riyal', symbol: 'ر.س', standardRate: 1.15, exchangeRate: 3.75, thousandAbbreviation: 'ألف' },
+  'SN': { currency: 'West African CFA Franc', symbol: 'CFA', standardRate: 0.40, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'RS': { currency: 'Serbian Dinar', symbol: 'дин', standardRate: 0.55, exchangeRate: 111.00, thousandAbbreviation: 'хиљада' },
+  'SC': { currency: 'Seychellois Rupee', symbol: '₨', standardRate: 0.60, exchangeRate: 13.50, thousandAbbreviation: 'K' },
+  'SL': { currency: 'Leone', symbol: 'Le', standardRate: 0.30, exchangeRate: 25150.00, thousandAbbreviation: 'K' },
+  'SG': { currency: 'Singapore Dollar', symbol: 'S$', standardRate: 1.10, exchangeRate: 1.30, thousandAbbreviation: 'K' },
+  'SK': { currency: 'Euro', symbol: '€', standardRate: 0.85, exchangeRate: 0.94, thousandAbbreviation: 'tis.' },
+  'SI': { currency: 'Euro', symbol: '€', standardRate: 0.90, exchangeRate: 0.94, thousandAbbreviation: 'tisoč' },
+  'SB': { currency: 'Solomon Islands Dollar', symbol: '$S', standardRate: 0.50, exchangeRate: 8.30, thousandAbbreviation: 'K' },
+  'SO': { currency: 'Somali Shilling', symbol: 'S', standardRate: 0.25, exchangeRate: 15000.00, thousandAbbreviation: 'kun' },
+  'ZA': { currency: 'South African Rand', symbol: 'R', standardRate: 0.70, exchangeRate: 17.53, thousandAbbreviation: 'K' },
+  'SS': { currency: 'South Sudanese Pound', symbol: '£', standardRate: 0.30, exchangeRate: 646.00, thousandAbbreviation: 'K' },
+  'ES': { currency: 'Euro', symbol: '€', standardRate: 1.05, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'LK': { currency: 'Sri Lankan Rupee', symbol: 'Rs', standardRate: 0.40, exchangeRate: 294.04, thousandAbbreviation: 'හ' },
+  'SD': { currency: 'Sudanese Pound', symbol: 'ج.س', standardRate: 0.35, exchangeRate: 600.00, thousandAbbreviation: 'ألف' },
+  'SR': { currency: 'Surinamese Dollar', symbol: '$', standardRate: 0.45, exchangeRate: 37.50, thousandAbbreviation: 'K' },
+  'SE': { currency: 'Swedish Krona', symbol: 'kr', standardRate: 1.15, exchangeRate: 10.32, thousandAbbreviation: 'tusen' },
+  'CH': { currency: 'Swiss Franc', symbol: 'CHF', standardRate: 1.25, exchangeRate: 0.85, thousandAbbreviation: 'Tsd.' },
+  'SY': { currency: 'Syrian Pound', symbol: 'ل.س', standardRate: 0.25, exchangeRate: 13000.00, thousandAbbreviation: 'ألف' },
+  'TW': { currency: 'New Taiwan Dollar', symbol: 'NT$', standardRate: 1.00, exchangeRate: 32.05, thousandAbbreviation: '千' },
+  'TJ': { currency: 'Somoni', symbol: 'SM', standardRate: 0.30, exchangeRate: 11.40, thousandAbbreviation: 'ҳазор' },
+  'TZ': { currency: 'Tanzanian Shilling', symbol: 'TSh', standardRate: 0.40, exchangeRate: 2520.00, thousandAbbreviation: 'K' },
+  'TH': { currency: 'Baht', symbol: '฿', standardRate: 0.50, exchangeRate: 33.15, thousandAbbreviation: 'พัน' },
+  'TG': { currency: 'West African CFA Franc', symbol: 'CFA', standardRate: 0.35, exchangeRate: 612.89, thousandAbbreviation: 'mille' },
+  'TO': { currency: 'Paʻanga', symbol: 'T$', standardRate: 0.50, exchangeRate: 2.30, thousandAbbreviation: 'K' },
+  'TT': { currency: 'Trinidad and Tobago Dollar', symbol: 'TT$', standardRate: 0.65, exchangeRate: 6.78, thousandAbbreviation: 'K' },
+  'TN': { currency: 'Tunisian Dinar', symbol: 'د.ت', standardRate: 0.50, exchangeRate: 3.15, thousandAbbreviation: 'ألف' },
+  'TR': { currency: 'Turkish Lira', symbol: '₺', standardRate: 0.65, exchangeRate: 34.20, thousandAbbreviation: 'bin' },
+  'TM': { currency: 'Turkmenistani Manat', symbol: 'T', standardRate: 0.55, exchangeRate: 3.50, thousandAbbreviation: 'müň' },
+  'TV': { currency: 'Australian Dollar', symbol: 'A$', standardRate: 1.00, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'UG': { currency: 'Ugandan Shilling', symbol: 'UGX', standardRate: 0.40, exchangeRate: 3750.00, thousandAbbreviation: 'K' },
+  'UA': { currency: 'Hryvnia', symbol: '₴', standardRate: 0.35, exchangeRate: 36.75, thousandAbbreviation: 'тисяча' },
+  'AE': { currency: 'UAE Dirham', symbol: 'د.إ', standardRate: 1.15, exchangeRate: 3.67, thousandAbbreviation: 'ألف' },
+  'GB': { currency: 'British Pound', symbol: '£', standardRate: 1.10, exchangeRate: 0.77, thousandAbbreviation: 'K' },
+  'US': { currency: 'US Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'UY': { currency: 'Uruguayan Peso', symbol: '$U', standardRate: 0.60, exchangeRate: 38.00, thousandAbbreviation: 'mil' },
+  'UZ': { currency: 'Uzbekistani Som', symbol: 'сўм', standardRate: 0.40, exchangeRate: 12050.00, thousandAbbreviation: 'минг' },
+  'VU': { currency: 'Vatu', symbol: 'Vt', standardRate: 0.50, exchangeRate: 120.00, thousandAbbreviation: 'tu' },
+  'DM': { currency: 'East Caribbean Dollar', symbol: '$', standardRate: 1.05, exchangeRate: 2.70, thousandAbbreviation: 'K' },
+  'VA': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'VE': { currency: 'Venezuelan Bolívar', symbol: 'Bs.S', standardRate: 0.20, exchangeRate: 36875.00, thousandAbbreviation: 'mil' },
+  'VN': { currency: 'Vietnamese Dong', symbol: '₫', standardRate: 0.30, exchangeRate: 24500.00, thousandAbbreviation: 'ngàn' },
+  'YE': { currency: 'Yemeni Rial', symbol: 'ر.ي', standardRate: 0.25, exchangeRate: 250.00, thousandAbbreviation: 'ألف' },
+  'ZM': { currency: 'Zambian Kwacha', symbol: 'ZK', standardRate: 0.35, exchangeRate: 22.50, thousandAbbreviation: 'K' },
+  'ZW': { currency: 'Zimbabwean Dollar', symbol: 'Z$', standardRate: 0.30, exchangeRate: 5145.00, thousandAbbreviation: 'K' },
+  'XK': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'PS': { currency: 'Israeli New Shekel', symbol: '₪', standardRate: 0.50, exchangeRate: 3.80, thousandAbbreviation: 'ألف' },
+  'IE': { currency: 'Euro', symbol: '€', standardRate: 1.10, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'IM': { currency: 'British Pound Sterling', symbol: '£', standardRate: 1.10, exchangeRate: 0.77, thousandAbbreviation: 'K' },
+  'HK': { currency: 'Hong Kong Dollar', symbol: 'HK$', standardRate: 0.95, exchangeRate: 7.80, thousandAbbreviation: 'K' },
+  'AX': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'AS': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'AI': { currency: 'East Caribbean Dollar', symbol: '$', standardRate: 1.05, exchangeRate: 2.70, thousandAbbreviation: 'K' },
+  'AQ': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'AW': { currency: 'Aruban Florin', symbol: 'ƒ', standardRate: 1.10, exchangeRate: 1.80, thousandAbbreviation: 'K' },
+  'BM': { currency: 'Bermudian Dollar', symbol: 'BD$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'BQ': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'IO': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'KY': { currency: 'Cayman Islands Dollar', symbol: 'CI$', standardRate: 1.20, exchangeRate: 0.82, thousandAbbreviation: 'K' },
+  'CX': { currency: 'Australian Dollar', symbol: 'A$', standardRate: 1.10, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'CC': { currency: 'Australian Dollar', symbol: 'A$', standardRate: 1.10, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'CK': { currency: 'New Zealand Dollar', symbol: 'NZ$', standardRate: 1.05, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'CW': { currency: 'Netherlands Antillean Guilder', symbol: 'ƒ', standardRate: 1.10, exchangeRate: 1.80, thousandAbbreviation: 'K' },
+  'FK': { currency: 'Falkland Islands Pound', symbol: '£', standardRate: 1.10, exchangeRate: 0.77, thousandAbbreviation: 'K' },
+  'FO': { currency: 'Danish Krone', symbol: 'kr', standardRate: 1.20, exchangeRate: 7.05, thousandAbbreviation: 'K' },
+  'GF': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'PF': { currency: 'CFP Franc', symbol: 'Fr', standardRate: 0.35, exchangeRate: 119.33, thousandAbbreviation: 'mille' },
+  'TF': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'K' },
+  'GI': { currency: 'Gibraltar Pound', symbol: '£', standardRate: 1.10, exchangeRate: 0.77, thousandAbbreviation: 'K' },
+  'GL': { currency: 'Danish Krone', symbol: 'kr', standardRate: 1.20, exchangeRate: 7.05, thousandAbbreviation: 'K' },
+  'GP': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'GU': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'GG': { currency: 'British Pound Sterling', symbol: '£', standardRate: 1.10, exchangeRate: 0.77, thousandAbbreviation: 'K' },
+  'HM': { currency: 'Australian Dollar', symbol: 'A$', standardRate: 1.10, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'JE': { currency: 'British Pound Sterling', symbol: '£', standardRate: 1.10, exchangeRate: 0.77, thousandAbbreviation: 'K' },
+  'MQ': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'YT': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'MS': { currency: 'East Caribbean Dollar', symbol: '$', standardRate: 1.05, exchangeRate: 2.70, thousandAbbreviation: 'K' },
+  'NC': { currency: 'CFP Franc', symbol: 'Fr', standardRate: 0.35, exchangeRate: 119.33, thousandAbbreviation: 'mille' },
+  'NU': { currency: 'New Zealand Dollar', symbol: 'NZ$', standardRate: 1.05, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'NF': { currency: 'Australian Dollar', symbol: 'A$', standardRate: 1.10, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'MP': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'PN': { currency: 'New Zealand Dollar', symbol: 'NZ$', standardRate: 1.05, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'PR': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'RE': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'BL': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'SH': { currency: 'Saint Helena Pound', symbol: '£', standardRate: 1.10, exchangeRate: 0.77, thousandAbbreviation: 'K' },
+  'MF': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'PM': { currency: 'Euro', symbol: '€', standardRate: 1.00, exchangeRate: 0.94, thousandAbbreviation: 'mil' },
+  'SX': { currency: 'Netherlands Antillean Guilder', symbol: 'ƒ', standardRate: 1.10, exchangeRate: 1.80, thousandAbbreviation: 'K' },
+  'GS': { currency: 'British Pound Sterling', symbol: '£', standardRate: 1.10, exchangeRate: 0.77, thousandAbbreviation: 'K' },
+  'SJ': { currency: 'Norwegian Krone', symbol: 'kr', standardRate: 1.20, exchangeRate: 10.63, thousandAbbreviation: 'tusen' },
+  'TK': { currency: 'New Zealand Dollar', symbol: 'NZ$', standardRate: 1.05, exchangeRate: 1.61, thousandAbbreviation: 'K' },
+  'TC': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'UM': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'VG': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'VI': { currency: 'United States Dollar', symbol: '$', standardRate: 1.00, exchangeRate: 1.00, thousandAbbreviation: 'K' },
+  'WF': { currency: 'CFP Franc', symbol: 'Fr', standardRate: 0.35, exchangeRate: 119.33, thousandAbbreviation: 'mille' },
+  'EH': { currency: 'Moroccan Dirham', symbol: 'د.م.', standardRate: 0.50, exchangeRate: 10.29, thousandAbbreviation: 'K' },
+  'MO': { currency: 'Macanese Pataca', symbol: 'MOP$', standardRate: 1.05, exchangeRate: 8.00, thousandAbbreviation: 'K' }
+};
+
+
+
+// List of currency symbols considered as symbols (no space between symbol and price)
+var symbolCurrencies = [
+  '$', '£', '€', '¥', '₽', '₩', '₪', '₨', '฿', '₺', '₫', '₱', '₴', '₦', '₹',
+  '؋', '﷼', '₭', '₮', '₡', '₲', '₵', '₸', '₤', '₳', '₰', '₯', '₠', '₣', '₧', '₯'
+];
+
+// Function to determine if currency symbol is text
+function isSymbolCurrency(symbol) {
+  return symbolCurrencies.includes(symbol);
+}
+
+// Function to parse the base price from a price element's data-base-price attribute
+function getElementBasePrice(priceElement) {
+  if (priceElement) {
+    var basePriceText = priceElement.getAttribute('data-base-price');
+    if (basePriceText) {
+      // Remove any currency symbols and commas
+      var basePrice = parseFloat(basePriceText.replace(/[^0-9\.,]/g, '').replace(',', '.'));
+      return basePrice;
+    }
+  }
+  // Default base price if not found
+  return 16.97;
+}
+
+// Function to update a price element
+function updatePriceElement(priceElement, symbol, adjustedPrice, basePriceDecimal, thousandAbbreviation, isLargeAmount) {
+  var space = isSymbolCurrency(symbol) ? '' : ' ';
+  if (isLargeAmount) {
+    // For large amounts over 100,000 USD
+    var adjustedPriceAbbreviated = (adjustedPrice / 1000).toFixed(0) + ' ' + thousandAbbreviation;
+    priceElement.innerText = symbol + space + adjustedPriceAbbreviated;
+  } else {
+    // Adjust the decimal part to match the base price
+    adjustedPrice = Math.floor(adjustedPrice) + basePriceDecimal;
+    adjustedPrice = adjustedPrice.toFixed(2);
+    priceElement.innerText = symbol + space + adjustedPrice;
+  }
+}
+
+// Function to initialize pricing
+function initializePricing() {
+  // Use the cfCountryCode variable set by PHP
+  var countryCode = typeof cfCountryCode !== 'undefined' ? cfCountryCode : 'US';
+
+  if (countryCode) {
+    var countryInfo = countryData[countryCode];
+    if (countryInfo) {
+      var standardRate = countryInfo.standardRate;
+      var exchangeRate = countryInfo.exchangeRate;
+      var symbol = countryInfo.symbol;
+      var thousandAbbreviation = countryInfo.thousandAbbreviation;
+
+      // Get all price elements
+      var priceElements = document.querySelectorAll('.price');
+      priceElements.forEach(function(priceElement) {
+        // Get the base price for this element
+        var basePrice = getElementBasePrice(priceElement);
+
+        // Adjusted Price in USD
+        var adjustedPriceUSD = basePrice * standardRate;
+
+        // Adjusted Price in Local Currency
+        var adjustedPriceLocal = adjustedPriceUSD * exchangeRate;
+
+        // Get the decimal part of the base price
+        var basePriceDecimal = basePrice - Math.floor(basePrice);
+
+        if (basePrice > 100000) {
+          // Price over $100,000 in USD
+          // Round adjustedPriceLocal to nearest thousand
+          adjustedPriceLocal = Math.round(adjustedPriceLocal / 1000) * 1000;
+          // Update the price element with the large amount formatting
+          updatePriceElement(priceElement, symbol, adjustedPriceLocal, basePriceDecimal, thousandAbbreviation, true);
+        } else {
+          // Update the price element with normal formatting
+          updatePriceElement(priceElement, symbol, adjustedPriceLocal, basePriceDecimal, thousandAbbreviation, false);
+        }
+      });
+    } else {
+      // Country not found, use default symbol and no adjustment
+      var symbol = '$';
+      var thousandAbbreviation = 'K';
+      var priceElements = document.querySelectorAll('.price');
+      priceElements.forEach(function(priceElement) {
+        var basePrice = getElementBasePrice(priceElement);
+        var basePriceDecimal = basePrice - Math.floor(basePrice);
+        updatePriceElement(priceElement, symbol, basePrice, basePriceDecimal, thousandAbbreviation, false);
+      });
+    }
+  } else {
+    // Country code not available, use default price
+    var symbol = '$';
+    var thousandAbbreviation = 'K';
+    var priceElements = document.querySelectorAll('.price');
+    priceElements.forEach(function(priceElement) {
+      var basePrice = getElementBasePrice(priceElement);
+      var basePriceDecimal = basePrice - Math.floor(basePrice);
+      updatePriceElement(priceElement, symbol, basePrice, basePriceDecimal, thousandAbbreviation, false);
+    });
+  }
+}
+
+// Wait for the DOM to load
+document.addEventListener('DOMContentLoaded', function() {
+  initializePricing();
+});
