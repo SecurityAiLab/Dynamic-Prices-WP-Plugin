@@ -1,0 +1,3541 @@
+/*
+Plugin Name: Custom WooCommerce Dynamic Pricing
+Description: Adjusts WooCommerce prices based on user location using Cloudflare's IP country header.
+Version: 1.1
+Author: Dobri
+*/
+
+// Exit if accessed directly
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
+// 1. Define the countryData array in PHP
+// 
+// 
+
+function cwdp_get_country_data() {
+	return array(
+		'AF' => array(
+			'currency_code' => 'AFN',
+			'symbol' => '؋',
+			'standardRate' => 0.37,
+			'exchangeRate' => 83.00,
+			'thousandAbbreviation' => 'هزار'
+		),
+		'AL' => array(
+			'currency_code' => 'ALL',
+			'symbol' => 'L',
+			'standardRate' => 0.60,
+			'exchangeRate' => 100.80,
+			'thousandAbbreviation' => 'mijë'
+		),
+		'DZ' => array(
+			'currency_code' => 'DZD',
+			'symbol' => 'د.ج',
+			'standardRate' => 0.55,
+			'exchangeRate' => 137.02,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'AD' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.00,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'AO' => array(
+			'currency_code' => 'AOA',
+			'symbol' => 'Kz',
+			'standardRate' => 0.45,
+			'exchangeRate' => 827.84,
+			'thousandAbbreviation' => 'mil'
+		),
+		'AG' => array(
+			'currency_code' => 'XCD',
+			'symbol' => '$',
+			'standardRate' => 1.15,
+			'exchangeRate' => 2.70,
+			'thousandAbbreviation' => 'K'
+		),
+		'AR' => array(
+			'currency_code' => 'ARS',
+			'symbol' => '$',
+			'standardRate' => 0.35,
+			'exchangeRate' => 349.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'AM' => array(
+			'currency_code' => 'AMD',
+			'symbol' => '֏',
+			'standardRate' => 0.62,
+			'exchangeRate' => 387.53,
+			'thousandAbbreviation' => 'հազար'
+		),
+		'AU' => array(
+			'currency_code' => 'AUD',
+			'symbol' => 'A$',
+			'standardRate' => 1.10,
+			'exchangeRate' => 1.61,
+			'thousandAbbreviation' => 'K'
+		),
+		'AT' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.15,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'Tsd.'
+		),
+		'AZ' => array(
+			'currency_code' => 'AZN',
+			'symbol' => '₼',
+			'standardRate' => 0.72,
+			'exchangeRate' => 1.70,
+			'thousandAbbreviation' => 'min'
+		),
+		'BS' => array(
+			'currency_code' => 'BSD',
+			'symbol' => '$',
+			'standardRate' => 1.25,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'BH' => array(
+			'currency_code' => 'BHD',
+			'symbol' => '.د.ب',
+			'standardRate' => 1.30,
+			'exchangeRate' => 0.38,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'BD' => array(
+			'currency_code' => 'BDT',
+			'symbol' => '৳',
+			'standardRate' => 0.50,
+			'exchangeRate' => 110.25,
+			'thousandAbbreviation' => 'হাজার'
+		),
+		'BB' => array(
+			'currency_code' => 'BBD',
+			'symbol' => '$',
+			'standardRate' => 1.05,
+			'exchangeRate' => 2.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'BY' => array(
+			'currency_code' => 'BYN',
+			'symbol' => 'Br',
+			'standardRate' => 0.50,
+			'exchangeRate' => 3.17,
+			'thousandAbbreviation' => 'тыс.'
+		),
+		'BE' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.10,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'BZ' => array(
+			'currency_code' => 'BZD',
+			'symbol' => 'BZ$',
+			'standardRate' => 0.85,
+			'exchangeRate' => 2.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'BJ' => array(
+			'currency_code' => 'XOF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'BT' => array(
+			'currency_code' => 'BTN',
+			'symbol' => 'Nu.',
+			'standardRate' => 0.50,
+			'exchangeRate' => 84.03,
+			'thousandAbbreviation' => 'ཁྲི'
+		),
+		'BO' => array(
+			'currency_code' => 'BOB',
+			'symbol' => 'Bs',
+			'standardRate' => 0.43,
+			'exchangeRate' => 6.87,
+			'thousandAbbreviation' => 'mil'
+		),
+		'BA' => array(
+			'currency_code' => 'BAM',
+			'symbol' => 'KM',
+			'standardRate' => 0.55,
+			'exchangeRate' => 1.83,
+			'thousandAbbreviation' => 'hiljada'
+		),
+		'BW' => array(
+			'currency_code' => 'BWP',
+			'symbol' => 'P',
+			'standardRate' => 0.62,
+			'exchangeRate' => 14.20,
+			'thousandAbbreviation' => 'K'
+		),
+		'BR' => array(
+			'currency_code' => 'BRL',
+			'symbol' => 'R$',
+			'standardRate' => 0.75,
+			'exchangeRate' => 5.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'BN' => array(
+			'currency_code' => 'BND',
+			'symbol' => 'B$',
+			'standardRate' => 1.10,
+			'exchangeRate' => 1.36,
+			'thousandAbbreviation' => 'K'
+		),
+		'BG' => array(
+			'currency_code' => 'BGN',
+			'symbol' => 'лв',
+			'standardRate' => 0.60,
+			'exchangeRate' => 1.80,
+			'thousandAbbreviation' => 'хил.'
+		),
+		'BF' => array(
+			'currency_code' => 'XOF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'BI' => array(
+			'currency_code' => 'BIF',
+			'symbol' => 'FBu',
+			'standardRate' => 0.25,
+			'exchangeRate' => 2830.00,
+			'thousandAbbreviation' => 'mille'
+		),
+		'CV' => array(
+			'currency_code' => 'CVE',
+			'symbol' => 'Esc',
+			'standardRate' => 0.50,
+			'exchangeRate' => 103.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'KH' => array(
+			'currency_code' => 'KHR',
+			'symbol' => '៛',
+			'standardRate' => 0.30,
+			'exchangeRate' => 4060.00,
+			'thousandAbbreviation' => 'ពាន់'
+		),
+		'CM' => array(
+			'currency_code' => 'XAF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.40,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'CA' => array(
+			'currency_code' => 'CAD',
+			'symbol' => 'C$',
+			'standardRate' => 1.10,
+			'exchangeRate' => 1.36,
+			'thousandAbbreviation' => 'K'
+		),
+		'CF' => array(
+			'currency_code' => 'XAF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'TD' => array(
+			'currency_code' => 'XAF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'CL' => array(
+			'currency_code' => 'CLP',
+			'symbol' => '$',
+			'standardRate' => 0.70,
+			'exchangeRate' => 885.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'CN' => array(
+			'currency_code' => 'CNY',
+			'symbol' => '¥',
+			'standardRate' => 0.65,
+			'exchangeRate' => 7.30,
+			'thousandAbbreviation' => '千'
+		),
+		'CO' => array(
+			'currency_code' => 'COP',
+			'symbol' => '$',
+			'standardRate' => 0.50,
+			'exchangeRate' => 4200.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'KM' => array(
+			'currency_code' => 'KMF',
+			'symbol' => 'CF',
+			'standardRate' => 0.30,
+			'exchangeRate' => 445.00,
+			'thousandAbbreviation' => 'mille'
+		),
+		'CD' => array(
+			'currency_code' => 'CDF',
+			'symbol' => 'FC',
+			'standardRate' => 0.25,
+			'exchangeRate' => 2475.00,
+			'thousandAbbreviation' => 'mille'
+		),
+		'CG' => array(
+			'currency_code' => 'XAF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'CR' => array(
+			'currency_code' => 'CRC',
+			'symbol' => '₡',
+			'standardRate' => 0.55,
+			'exchangeRate' => 537.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'HR' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 0.75,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'CU' => array(
+			'currency_code' => 'CUP',
+			'symbol' => '$',
+			'standardRate' => 0.35,
+			'exchangeRate' => 24.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'CY' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.05,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'χιλ'
+		),
+		'CZ' => array(
+			'currency_code' => 'CZK',
+			'symbol' => 'Kč',
+			'standardRate' => 0.80,
+			'exchangeRate' => 23.00,
+			'thousandAbbreviation' => 'tis.'
+		),
+		'DK' => array(
+			'currency_code' => 'DKK',
+			'symbol' => 'kr',
+			'standardRate' => 1.20,
+			'exchangeRate' => 7.05,
+			'thousandAbbreviation' => 'tusind'
+		),
+		'DJ' => array(
+			'currency_code' => 'DJF',
+			'symbol' => 'Fdj',
+			'standardRate' => 0.40,
+			'exchangeRate' => 177.50,
+			'thousandAbbreviation' => 'mille'
+		),
+		'DO' => array(
+			'currency_code' => 'DOP',
+			'symbol' => 'RD$',
+			'standardRate' => 0.50,
+			'exchangeRate' => 56.25,
+			'thousandAbbreviation' => 'mil'
+		),
+		'TL' => array(
+			'currency_code' => 'USD',
+			'symbol' => '$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'EC' => array(
+			'currency_code' => 'USD',
+			'symbol' => '$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'EG' => array(
+			'currency_code' => 'EGP',
+			'symbol' => 'ج.م',
+			'standardRate' => 0.45,
+			'exchangeRate' => 30.90,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'SV' => array(
+			'currency_code' => 'USD',
+			'symbol' => '$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'GQ' => array(
+			'currency_code' => 'XAF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'ER' => array(
+			'currency_code' => 'ERN',
+			'symbol' => 'Nkf',
+			'standardRate' => 0.40,
+			'exchangeRate' => 15.00,
+			'thousandAbbreviation' => 'አንድ ሺህ'
+		),
+		'EE' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.00,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'tuhat'
+		),
+		'SZ' => array(
+			'currency_code' => 'SZL',
+			'symbol' => 'E',
+			'standardRate' => 0.55,
+			'exchangeRate' => 17.53,
+			'thousandAbbreviation' => 'K'
+		),
+		'ET' => array(
+			'currency_code' => 'ETB',
+			'symbol' => 'Br',
+			'standardRate' => 0.40,
+			'exchangeRate' => 55.00,
+			'thousandAbbreviation' => 'ሺህ'
+		),
+		'FJ' => array(
+			'currency_code' => 'FJD',
+			'symbol' => 'FJ$',
+			'standardRate' => 0.65,
+			'exchangeRate' => 2.30,
+			'thousandAbbreviation' => 'K'
+		),
+		'FI' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.15,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'tuhat'
+		),
+		'FR' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.15,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'GA' => array(
+			'currency_code' => 'XAF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.40,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'GM' => array(
+			'currency_code' => 'GMD',
+			'symbol' => 'D',
+			'standardRate' => 0.35,
+			'exchangeRate' => 70.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'GE' => array(
+			'currency_code' => 'GEL',
+			'symbol' => '₾',
+			'standardRate' => 0.50,
+			'exchangeRate' => 2.65,
+			'thousandAbbreviation' => 'ათას'
+		),
+		'DE' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.10,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'Tsd.'
+		),
+		'GH' => array(
+			'currency_code' => 'GHS',
+			'symbol' => '₵',
+			'standardRate' => 0.50,
+			'exchangeRate' => 15.85,
+			'thousandAbbreviation' => 'K'
+		),
+		'GR' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.00,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'χιλ'
+		),
+		'GD' => array(
+			'currency_code' => 'XCD',
+			'symbol' => '$',
+			'standardRate' => 1.05,
+			'exchangeRate' => 2.70,
+			'thousandAbbreviation' => 'K'
+		),
+		'GT' => array(
+			'currency_code' => 'GTQ',
+			'symbol' => 'Q',
+			'standardRate' => 0.55,
+			'exchangeRate' => 7.74,
+			'thousandAbbreviation' => 'mil'
+		),
+		'GN' => array(
+			'currency_code' => 'GNF',
+			'symbol' => 'FG',
+			'standardRate' => 0.30,
+			'exchangeRate' => 8637.13,
+			'thousandAbbreviation' => 'mille'
+		),
+		'GW' => array(
+			'currency_code' => 'XOF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'GY' => array(
+			'currency_code' => 'GYD',
+			'symbol' => 'G$',
+			'standardRate' => 0.40,
+			'exchangeRate' => 209.30,
+			'thousandAbbreviation' => 'K'
+		),
+		'HT' => array(
+			'currency_code' => 'HTG',
+			'symbol' => 'G',
+			'standardRate' => 0.25,
+			'exchangeRate' => 132.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'HN' => array(
+			'currency_code' => 'HNL',
+			'symbol' => 'L',
+			'standardRate' => 0.45,
+			'exchangeRate' => 24.96,
+			'thousandAbbreviation' => 'mil'
+		),
+		'HU' => array(
+			'currency_code' => 'HUF',
+			'symbol' => 'Ft',
+			'standardRate' => 0.70,
+			'exchangeRate' => 364.19,
+			'thousandAbbreviation' => 'ezer'
+		),
+		'IS' => array(
+			'currency_code' => 'ISK',
+			'symbol' => 'kr',
+			'standardRate' => 1.15,
+			'exchangeRate' => 135.52,
+			'thousandAbbreviation' => 'þúsund'
+		),
+		'IN' => array(
+			'currency_code' => 'INR',
+			'symbol' => '₹',
+			'standardRate' => 0.35,
+			'exchangeRate' => 84.03,
+			'thousandAbbreviation' => 'हजार'
+		),
+		'ID' => array(
+			'currency_code' => 'IDR',
+			'symbol' => 'Rp',
+			'standardRate' => 0.30,
+			'exchangeRate' => 15494.26,
+			'thousandAbbreviation' => 'ribu'
+		),
+		'IR' => array(
+			'currency_code' => 'IRR',
+			'symbol' => '﷼',
+			'standardRate' => 0.25,
+			'exchangeRate' => 42100.00,
+			'thousandAbbreviation' => 'هزار'
+		),
+		'IQ' => array(
+			'currency_code' => 'IQD',
+			'symbol' => 'ع.د',
+			'standardRate' => 0.50,
+			'exchangeRate' => 1310.53,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'IL' => array(
+			'currency_code' => 'ILS',
+			'symbol' => '₪',
+			'standardRate' => 1.05,
+			'exchangeRate' => 3.80,
+			'thousandAbbreviation' => 'אלף'
+		),
+		'IT' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.00,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mila'
+		),
+		'CI' => array(
+			'currency_code' => 'XOF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.40,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'JM' => array(
+			'currency_code' => 'JMD',
+			'symbol' => 'J$',
+			'standardRate' => 0.40,
+			'exchangeRate' => 157.92,
+			'thousandAbbreviation' => 'K'
+		),
+		'JP' => array(
+			'currency_code' => 'JPY',
+			'symbol' => '¥',
+			'standardRate' => 1.00,
+			'exchangeRate' => 146.78,
+			'thousandAbbreviation' => '千'
+		),
+		'JO' => array(
+			'currency_code' => 'JOD',
+			'symbol' => 'د.أ',
+			'standardRate' => 0.95,
+			'exchangeRate' => 0.71,
+			'thousandAbbreviation' => 'ألف'
+		),
+				'KZ' => array(
+			'currency_code' => 'KZT',
+			'symbol' => '₸',
+			'standardRate' => 0.50,
+			'exchangeRate' => 462.00,
+			'thousandAbbreviation' => 'мың'
+		),
+		'KE' => array(
+			'currency_code' => 'KES',
+			'symbol' => 'KSh',
+			'standardRate' => 0.45,
+			'exchangeRate' => 129.05,
+			'thousandAbbreviation' => 'K'
+		),
+		'KI' => array(
+			'currency_code' => 'AUD',
+			'symbol' => 'A$',
+			'standardRate' => 0.65,
+			'exchangeRate' => 1.61,
+			'thousandAbbreviation' => 'K'
+		),
+		'KP' => array(
+			'currency_code' => 'KPW',
+			'symbol' => '₩',
+			'standardRate' => 0.20,
+			'exchangeRate' => 900.00,
+			'thousandAbbreviation' => '천'
+		),
+		'KR' => array(
+			'currency_code' => 'KRW',
+			'symbol' => '₩',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1350.00,
+			'thousandAbbreviation' => '천'
+		),
+		'KW' => array(
+			'currency_code' => 'KWD',
+			'symbol' => 'د.ك',
+			'standardRate' => 1.35,
+			'exchangeRate' => 0.31,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'KG' => array(
+			'currency_code' => 'KGS',
+			'symbol' => 'с',
+			'standardRate' => 0.30,
+			'exchangeRate' => 84.46,
+			'thousandAbbreviation' => 'миң'
+		),
+		'LA' => array(
+			'currency_code' => 'LAK',
+			'symbol' => '₭',
+			'standardRate' => 0.25,
+			'exchangeRate' => 18600.00,
+			'thousandAbbreviation' => 'ພັນ'
+		),
+		'LV' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 0.95,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'tūkst.'
+		),
+		'LB' => array(
+			'currency_code' => 'LBP',
+			'symbol' => 'ل.ل',
+			'standardRate' => 0.35,
+			'exchangeRate' => 90000.00,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'LS' => array(
+			'currency_code' => 'LSL',
+			'symbol' => 'L',
+			'standardRate' => 0.50,
+			'exchangeRate' => 17.53,
+			'thousandAbbreviation' => 'K'
+		),
+		'LR' => array(
+			'currency_code' => 'LRD',
+			'symbol' => '$',
+			'standardRate' => 0.30,
+			'exchangeRate' => 185.50,
+			'thousandAbbreviation' => 'K'
+		),
+		'LY' => array(
+			'currency_code' => 'LYD',
+			'symbol' => 'ل.د',
+			'standardRate' => 0.50,
+			'exchangeRate' => 4.76,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'LI' => array(
+			'currency_code' => 'CHF',
+			'symbol' => 'CHF',
+			'standardRate' => 1.25,
+			'exchangeRate' => 0.85,
+			'thousandAbbreviation' => 'Tsd.'
+		),
+		'LT' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 0.95,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'tūkst.'
+		),
+		'LU' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.20,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'MG' => array(
+			'currency_code' => 'MGA',
+			'symbol' => 'Ar',
+			'standardRate' => 0.35,
+			'exchangeRate' => 4540.00,
+			'thousandAbbreviation' => 'arivo'
+		),
+		'MW' => array(
+			'currency_code' => 'MWK',
+			'symbol' => 'MK',
+			'standardRate' => 0.30,
+			'exchangeRate' => 1220.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'MY' => array(
+			'currency_code' => 'MYR',
+			'symbol' => 'RM',
+			'standardRate' => 0.50,
+			'exchangeRate' => 4.22,
+			'thousandAbbreviation' => 'ribu'
+		),
+		'MV' => array(
+			'currency_code' => 'MVR',
+			'symbol' => 'ރ',
+			'standardRate' => 0.65,
+			'exchangeRate' => 15.40,
+			'thousandAbbreviation' => 'މަދާލަ'
+		),
+		'ML' => array(
+			'currency_code' => 'XOF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'MT' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.00,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'Tsd.'
+		),
+		'MH' => array(
+			'currency_code' => 'USD',
+			'symbol' => '$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'MR' => array(
+			'currency_code' => 'MRU',
+			'symbol' => 'UM',
+			'standardRate' => 0.40,
+			'exchangeRate' => 37.50,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'MU' => array(
+			'currency_code' => 'MUR',
+			'symbol' => 'Rs',
+			'standardRate' => 0.50,
+			'exchangeRate' => 46.37,
+			'thousandAbbreviation' => 'K'
+		),
+		'MX' => array(
+			'currency_code' => 'MXN',
+			'symbol' => '$',
+			'standardRate' => 0.50,
+			'exchangeRate' => 19.49,
+			'thousandAbbreviation' => 'mil'
+		),
+		'FM' => array(
+			'currency_code' => 'USD',
+			'symbol' => '$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'MD' => array(
+			'currency_code' => 'MDL',
+			'symbol' => 'L',
+			'standardRate' => 0.40,
+			'exchangeRate' => 17.88,
+			'thousandAbbreviation' => 'mii'
+		),
+		'MC' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.20,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'MN' => array(
+			'currency_code' => 'MNT',
+			'symbol' => '₮',
+			'standardRate' => 0.30,
+			'exchangeRate' => 3457.00,
+			'thousandAbbreviation' => 'мянга'
+		),
+		'ME' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 0.80,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'hiljada'
+		),
+		'MA' => array(
+			'currency_code' => 'MAD',
+			'symbol' => 'د.م.',
+			'standardRate' => 0.50,
+			'exchangeRate' => 10.29,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'MZ' => array(
+			'currency_code' => 'MZN',
+			'symbol' => 'MT',
+			'standardRate' => 0.35,
+			'exchangeRate' => 64.63,
+			'thousandAbbreviation' => 'mil'
+		),
+		'MM' => array(
+			'currency_code' => 'MMK',
+			'symbol' => 'K',
+			'standardRate' => 0.25,
+			'exchangeRate' => 3300.00,
+			'thousandAbbreviation' => 'ကောင်'
+		),
+		'NA' => array(
+			'currency_code' => 'NAD',
+			'symbol' => 'N$',
+			'standardRate' => 0.55,
+			'exchangeRate' => 17.53,
+			'thousandAbbreviation' => 'K'
+		),
+		'NR' => array(
+			'currency_code' => 'AUD',
+			'symbol' => 'A$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.61,
+			'thousandAbbreviation' => 'K'
+		),
+		'NP' => array(
+			'currency_code' => 'NPR',
+			'symbol' => 'रू',
+			'standardRate' => 0.35,
+			'exchangeRate' => 134.48,
+			'thousandAbbreviation' => 'हजार'
+		),
+		'NL' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.10,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'NZ' => array(
+			'currency_code' => 'NZD',
+			'symbol' => 'NZ$',
+			'standardRate' => 1.05,
+			'exchangeRate' => 1.61,
+			'thousandAbbreviation' => 'K'
+		),
+		'NI' => array(
+			'currency_code' => 'NIO',
+			'symbol' => 'C$',
+			'standardRate' => 0.45,
+			'exchangeRate' => 36.43,
+			'thousandAbbreviation' => 'mil'
+		),
+		'NE' => array(
+			'currency_code' => 'XOF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'NG' => array(
+			'currency_code' => 'NGN',
+			'symbol' => '₦',
+			'standardRate' => 0.30,
+			'exchangeRate' => 770.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'MK' => array(
+			'currency_code' => 'MKD',
+			'symbol' => 'ден',
+			'standardRate' => 0.50,
+			'exchangeRate' => 58.40,
+			'thousandAbbreviation' => 'илјада'
+		),
+		'NO' => array(
+			'currency_code' => 'NOK',
+			'symbol' => 'kr',
+			'standardRate' => 1.20,
+			'exchangeRate' => 10.63,
+			'thousandAbbreviation' => 'tusen'
+		),
+		'OM' => array(
+			'currency_code' => 'OMR',
+			'symbol' => 'ر.ع.',
+			'standardRate' => 1.35,
+			'exchangeRate' => 0.39,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'PK' => array(
+			'currency_code' => 'PKR',
+			'symbol' => '₨',
+			'standardRate' => 0.30,
+			'exchangeRate' => 277.82,
+			'thousandAbbreviation' => 'ہزار'
+		),
+		'PW' => array(
+			'currency_code' => 'USD',
+			'symbol' => '$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'PA' => array(
+			'currency_code' => 'PAB',
+			'symbol' => 'B/.',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'PG' => array(
+			'currency_code' => 'PGK',
+			'symbol' => 'K',
+			'standardRate' => 0.50,
+			'exchangeRate' => 3.55,
+			'thousandAbbreviation' => 'K'
+		),
+		'PY' => array(
+			'currency_code' => 'PYG',
+			'symbol' => 'Gs',
+			'standardRate' => 0.40,
+			'exchangeRate' => 7350.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'PE' => array(
+			'currency_code' => 'PEN',
+			'symbol' => 'S/.',
+			'standardRate' => 0.55,
+			'exchangeRate' => 3.70,
+			'thousandAbbreviation' => 'mil'
+		),
+		'PH' => array(
+			'currency_code' => 'PHP',
+			'symbol' => '₱',
+			'standardRate' => 0.45,
+			'exchangeRate' => 56.43,
+			'thousandAbbreviation' => 'K'
+		),
+		'PL' => array(
+			'currency_code' => 'PLN',
+			'symbol' => 'zł',
+			'standardRate' => 0.70,
+			'exchangeRate' => 3.91,
+			'thousandAbbreviation' => 'tys.'
+		),
+		'PT' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.00,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'QA' => array(
+			'currency_code' => 'QAR',
+			'symbol' => 'ر.ق',
+			'standardRate' => 1.30,
+			'exchangeRate' => 3.64,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'RO' => array(
+			'currency_code' => 'RON',
+			'symbol' => 'lei',
+			'standardRate' => 0.70,
+			'exchangeRate' => 4.52,
+			'thousandAbbreviation' => 'mii'
+		),
+		'RU' => array(
+			'currency_code' => 'RUB',
+			'symbol' => '₽',
+			'standardRate' => 0.65,
+			'exchangeRate' => 95.11,
+			'thousandAbbreviation' => 'тыс.'
+		),
+		'RW' => array(
+			'currency_code' => 'RWF',
+			'symbol' => 'Fr',
+			'standardRate' => 0.35,
+			'exchangeRate' => 1230.00,
+			'thousandAbbreviation' => 'ibihumbi'
+		),
+		'KN' => array(
+			'currency_code' => 'XCD',
+			'symbol' => '$',
+			'standardRate' => 1.05,
+			'exchangeRate' => 2.70,
+			'thousandAbbreviation' => 'K'
+		),
+		'LC' => array(
+			'currency_code' => 'XCD',
+			'symbol' => '$',
+			'standardRate' => 1.05,
+			'exchangeRate' => 2.70,
+			'thousandAbbreviation' => 'K'
+		),
+		'VC' => array(
+			'currency_code' => 'XCD',
+			'symbol' => '$',
+			'standardRate' => 1.05,
+			'exchangeRate' => 2.70,
+			'thousandAbbreviation' => 'K'
+		),
+		'WS' => array(
+			'currency_code' => 'WST',
+			'symbol' => 'T',
+			'standardRate' => 0.55,
+			'exchangeRate' => 2.75,
+			'thousandAbbreviation' => 'K'
+		),
+		'SM' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.20,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'ST' => array(
+			'currency_code' => 'STN',
+			'symbol' => 'Db',
+			'standardRate' => 0.40,
+			'exchangeRate' => 22.10,
+			'thousandAbbreviation' => 'mil'
+		),
+		'SA' => array(
+			'currency_code' => 'SAR',
+			'symbol' => 'ر.س',
+			'standardRate' => 1.15,
+			'exchangeRate' => 3.75,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'SN' => array(
+			'currency_code' => 'XOF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.40,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'RS' => array(
+			'currency_code' => 'RSD',
+			'symbol' => 'дин',
+			'standardRate' => 0.55,
+			'exchangeRate' => 111.00,
+			'thousandAbbreviation' => 'хиљада'
+		),
+		'SC' => array(
+			'currency_code' => 'SCR',
+			'symbol' => '₨',
+			'standardRate' => 0.60,
+			'exchangeRate' => 13.50,
+			'thousandAbbreviation' => 'K'
+		),
+		'SL' => array(
+			'currency_code' => 'SLL',
+			'symbol' => 'Le',
+			'standardRate' => 0.30,
+			'exchangeRate' => 20969.5,
+			'thousandAbbreviation' => 'K'
+		),
+		'SG' => array(
+			'currency_code' => 'SGD',
+			'symbol' => 'S$',
+			'standardRate' => 1.10,
+			'exchangeRate' => 1.30,
+			'thousandAbbreviation' => 'K'
+		),
+		'SK' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 0.85,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'tis.'
+		),
+		'SI' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 0.90,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'tisoč'
+		),
+		'SB' => array(
+			'currency_code' => 'SBD',
+			'symbol' => '$S',
+			'standardRate' => 0.50,
+			'exchangeRate' => 8.30,
+			'thousandAbbreviation' => 'K'
+		),
+		'SO' => array(
+			'currency_code' => 'SOS',
+			'symbol' => 'S',
+			'standardRate' => 0.25,
+			'exchangeRate' => 600.00,
+			'thousandAbbreviation' => 'kun'
+		),
+		'ZA' => array(
+			'currency_code' => 'ZAR',
+			'symbol' => 'R',
+			'standardRate' => 0.70,
+			'exchangeRate' => 17.53,
+			'thousandAbbreviation' => 'K'
+		),
+		'SS' => array(
+			'currency_code' => 'SSP',
+			'symbol' => '£',
+			'standardRate' => 0.30,
+			'exchangeRate' => 646.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'ES' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.05,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'LK' => array(
+			'currency_code' => 'LKR',
+			'symbol' => 'Rs',
+			'standardRate' => 0.40,
+			'exchangeRate' => 294.04,
+			'thousandAbbreviation' => 'හ'
+		),
+		'SD' => array(
+			'currency_code' => 'SDG',
+			'symbol' => 'ج.س',
+			'standardRate' => 0.35,
+			'exchangeRate' => 600.00,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'SR' => array(
+			'currency_code' => 'SRD',
+			'symbol' => '$',
+			'standardRate' => 0.45,
+			'exchangeRate' => 37.50,
+			'thousandAbbreviation' => 'K'
+		),
+		'SE' => array(
+			'currency_code' => 'SEK',
+			'symbol' => 'kr',
+			'standardRate' => 1.15,
+			'exchangeRate' => 10.32,
+			'thousandAbbreviation' => 'tusen'
+		),
+		'CH' => array(
+			'currency_code' => 'CHF',
+			'symbol' => 'CHF',
+			'standardRate' => 1.25,
+			'exchangeRate' => 0.85,
+			'thousandAbbreviation' => 'Tsd.'
+		),
+		'SY' => array(
+			'currency_code' => 'SYP',
+			'symbol' => 'ل.س',
+			'standardRate' => 0.25,
+			'exchangeRate' => 13000.00,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'TW' => array(
+			'currency_code' => 'TWD',
+			'symbol' => 'NT$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 32.05,
+			'thousandAbbreviation' => '千'
+		),
+		'TJ' => array(
+			'currency_code' => 'TJS',
+			'symbol' => 'SM',
+			'standardRate' => 0.30,
+			'exchangeRate' => 11.40,
+			'thousandAbbreviation' => 'ҳазор'
+		),
+		'TZ' => array(
+			'currency_code' => 'TZS',
+			'symbol' => 'TSh',
+			'standardRate' => 0.40,
+			'exchangeRate' => 2520.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'TH' => array(
+			'currency_code' => 'THB',
+			'symbol' => '฿',
+			'standardRate' => 0.50,
+			'exchangeRate' => 33.15,
+			'thousandAbbreviation' => 'พัน'
+		),
+		'TG' => array(
+			'currency_code' => 'XOF',
+			'symbol' => 'CFA',
+			'standardRate' => 0.35,
+			'exchangeRate' => 612.89,
+			'thousandAbbreviation' => 'mille'
+		),
+		'TO' => array(
+			'currency_code' => 'TOP',
+			'symbol' => 'T$',
+			'standardRate' => 0.50,
+			'exchangeRate' => 2.30,
+			'thousandAbbreviation' => 'K'
+		),
+		'TT' => array(
+			'currency_code' => 'TTD',
+			'symbol' => 'TT$',
+			'standardRate' => 0.65,
+			'exchangeRate' => 6.78,
+			'thousandAbbreviation' => 'K'
+		),
+		'TN' => array(
+			'currency_code' => 'TND',
+			'symbol' => 'د.ت',
+			'standardRate' => 0.50,
+			'exchangeRate' => 3.15,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'TR' => array(
+			'currency_code' => 'TRY',
+			'symbol' => '₺',
+			'standardRate' => 0.65,
+			'exchangeRate' => 34.20,
+			'thousandAbbreviation' => 'bin'
+		),
+		'TM' => array(
+			'currency_code' => 'TMT',
+			'symbol' => 'T',
+			'standardRate' => 0.55,
+			'exchangeRate' => 3.50,
+			'thousandAbbreviation' => 'müň'
+		),
+		'TV' => array(
+			'currency_code' => 'AUD',
+			'symbol' => 'A$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.61,
+			'thousandAbbreviation' => 'K'
+		),
+		'UG' => array(
+			'currency_code' => 'UGX',
+			'symbol' => 'UGX',
+			'standardRate' => 0.40,
+			'exchangeRate' => 3750.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'UA' => array(
+			'currency_code' => 'UAH',
+			'symbol' => '₴',
+			'standardRate' => 0.35,
+			'exchangeRate' => 36.75,
+			'thousandAbbreviation' => 'тисяча'
+		),
+		'AE' => array(
+			'currency_code' => 'AED',
+			'symbol' => 'د.إ',
+			'standardRate' => 1.15,
+			'exchangeRate' => 3.67,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'GB' => array(
+			'currency_code' => 'GBP',
+			'symbol' => '£',
+			'standardRate' => 1.10,
+			'exchangeRate' => 0.77,
+			'thousandAbbreviation' => 'K'
+		),
+		'US' => array(
+			'currency_code' => 'USD',
+			'symbol' => '$',
+			'standardRate' => 1.00,
+			'exchangeRate' => 1.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'UY' => array(
+			'currency_code' => 'UYU',
+			'symbol' => '$U',
+			'standardRate' => 0.60,
+			'exchangeRate' => 38.00,
+			'thousandAbbreviation' => 'mil'
+		),
+		'UZ' => array(
+			'currency_code' => 'UZS',
+			'symbol' => 'сўм',
+			'standardRate' => 0.40,
+			'exchangeRate' => 12050.00,
+			'thousandAbbreviation' => 'минг'
+		),
+		'VU' => array(
+			'currency_code' => 'VUV',
+			'symbol' => 'Vt',
+			'standardRate' => 0.50,
+			'exchangeRate' => 120.00,
+			'thousandAbbreviation' => 'tu'
+		),
+		'DM' => array(
+			'currency_code' => 'XCD',
+			'symbol' => '$',
+			'standardRate' => 1.05,
+			'exchangeRate' => 2.70,
+			'thousandAbbreviation' => 'K'
+		),
+		'VA' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.00,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'VE' => array(
+			'currency_code' => 'VES',
+			'symbol' => 'Bs.S',
+			'standardRate' => 0.20,
+			'exchangeRate' => 36895.90,
+			'thousandAbbreviation' => 'mil'
+		),
+		'VN' => array(
+			'currency_code' => 'VND',
+			'symbol' => '₫',
+			'standardRate' => 0.30,
+			'exchangeRate' => 24500.00,
+			'thousandAbbreviation' => 'ngàn'
+		),
+		'YE' => array(
+			'currency_code' => 'YER',
+			'symbol' => 'ر.ي',
+			'standardRate' => 0.25,
+			'exchangeRate' => 250.00,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'ZM' => array(
+			'currency_code' => 'ZMW',
+			'symbol' => 'ZK',
+			'standardRate' => 0.35,
+			'exchangeRate' => 22.50,
+			'thousandAbbreviation' => 'K'
+		),
+		'ZW' => array(
+			'currency_code' => 'ZWL',
+			'symbol' => 'Z$',
+			'standardRate' => 0.30,
+			'exchangeRate' => 5145.00,
+			'thousandAbbreviation' => 'K'
+		),
+		'XK' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.00,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'PS' => array(
+			'currency_code' => 'ILS',
+			'symbol' => '₪',
+			'standardRate' => 0.50,
+			'exchangeRate' => 3.80,
+			'thousandAbbreviation' => 'ألف'
+		),
+		'IE' => array(
+			'currency_code' => 'EUR',
+			'symbol' => '€',
+			'standardRate' => 1.10,
+			'exchangeRate' => 0.94,
+			'thousandAbbreviation' => 'mil'
+		),
+		'IM' => array(
+			'currency_code' => 'GBP',
+			'symbol' => '£',
+			'standardRate' => 1.10,
+			'exchangeRate' => 0.77,
+			'thousandAbbreviation' => 'K'
+		),
+		'HK' => array(
+		'currency_code' => 'HKD',
+		'symbol' => 'HK$',
+		'standardRate' => 0.95, // Updated based on PPP data
+		'exchangeRate' => 7.80, // Exchange rate from USD to HKD
+		'thousandAbbreviation' => 'K'
+		),
+		        // Åland Islands (AX)
+        'AX' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // American Samoa (AS)
+        'AS' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Anguilla (AI)
+        'AI' => array(
+            'currency_code' => 'XCD',
+            'symbol' => '$',
+            'standardRate' => 1.05,
+            'exchangeRate' => 2.70,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Antarctica (AQ)
+        'AQ' => array(
+            'currency_code' => 'USD', // Commonly USD used
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Aruba (AW)
+        'AW' => array(
+            'currency_code' => 'AWG',
+            'symbol' => 'ƒ',
+            'standardRate' => 1.10,
+            'exchangeRate' => 1.80,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Bermuda (BM)
+        'BM' => array(
+            'currency_code' => 'BMD',
+            'symbol' => 'BD$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Bonaire, Sint Eustatius and Saba (BQ)
+        'BQ' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // British Indian Ocean Territory (IO)
+        'IO' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Cayman Islands (KY)
+        'KY' => array(
+            'currency_code' => 'KYD',
+            'symbol' => 'CI$',
+            'standardRate' => 1.20,
+            'exchangeRate' => 0.82,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Christmas Island (CX)
+        'CX' => array(
+            'currency_code' => 'AUD',
+            'symbol' => 'A$',
+            'standardRate' => 1.10,
+            'exchangeRate' => 1.61,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Cocos (Keeling) Islands (CC)
+        'CC' => array(
+            'currency_code' => 'AUD',
+            'symbol' => 'A$',
+            'standardRate' => 1.10,
+            'exchangeRate' => 1.61,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Cook Islands (CK)
+        'CK' => array(
+            'currency_code' => 'NZD',
+            'symbol' => 'NZ$',
+            'standardRate' => 1.05,
+            'exchangeRate' => 1.61,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Curaçao (CW)
+        'CW' => array(
+            'currency_code' => 'ANG',
+            'symbol' => 'ƒ',
+            'standardRate' => 1.10,
+            'exchangeRate' => 1.80,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Falkland Islands (FK)
+        'FK' => array(
+            'currency_code' => 'FKP',
+            'symbol' => '£',
+            'standardRate' => 1.10,
+            'exchangeRate' => 0.77,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Faroe Islands (FO)
+        'FO' => array(
+            'currency_code' => 'DKK',
+            'symbol' => 'kr',
+            'standardRate' => 1.20,
+            'exchangeRate' => 7.05,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // French Guiana (GF)
+        'GF' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // French Polynesia (PF)
+        'PF' => array(
+            'currency_code' => 'XPF',
+            'symbol' => 'Fr',
+            'standardRate' => 0.35,
+            'exchangeRate' => 119.33,
+            'thousandAbbreviation' => 'mille'
+        ),
+
+        // French Southern Territories (TF)
+        'TF' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Gibraltar (GI)
+        'GI' => array(
+            'currency_code' => 'GIP',
+            'symbol' => '£',
+            'standardRate' => 1.10,
+            'exchangeRate' => 0.77,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Greenland (GL)
+        'GL' => array(
+            'currency_code' => 'DKK',
+            'symbol' => 'kr',
+            'standardRate' => 1.20,
+            'exchangeRate' => 7.05,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Guadeloupe (GP)
+        'GP' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // Guam (GU)
+        'GU' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Guernsey (GG)
+        'GG' => array(
+            'currency_code' => 'GBP',
+            'symbol' => '£',
+            'standardRate' => 1.10,
+            'exchangeRate' => 0.77,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Heard Island and McDonald Islands (HM)
+        'HM' => array(
+            'currency_code' => 'AUD',
+            'symbol' => 'A$',
+            'standardRate' => 1.10,
+            'exchangeRate' => 1.61,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Jersey (JE)
+        'JE' => array(
+            'currency_code' => 'GBP',
+            'symbol' => '£',
+            'standardRate' => 1.10,
+            'exchangeRate' => 0.77,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Martinique (MQ)
+        'MQ' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // Mayotte (YT)
+        'YT' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // Montserrat (MS)
+        'MS' => array(
+            'currency_code' => 'XCD',
+            'symbol' => '$',
+            'standardRate' => 1.05,
+            'exchangeRate' => 2.70,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // New Caledonia (NC)
+        'NC' => array(
+            'currency_code' => 'XPF',
+            'symbol' => 'Fr',
+            'standardRate' => 0.35,
+            'exchangeRate' => 119.33,
+            'thousandAbbreviation' => 'mille'
+        ),
+
+        // Niue (NU)
+        'NU' => array(
+            'currency_code' => 'NZD',
+            'symbol' => 'NZ$',
+            'standardRate' => 1.05,
+            'exchangeRate' => 1.61,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Norfolk Island (NF)
+        'NF' => array(
+            'currency_code' => 'AUD',
+            'symbol' => 'A$',
+            'standardRate' => 1.10,
+            'exchangeRate' => 1.61,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Northern Mariana Islands (MP)
+        'MP' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Pitcairn (PN)
+        'PN' => array(
+            'currency_code' => 'NZD',
+            'symbol' => 'NZ$',
+            'standardRate' => 1.05,
+            'exchangeRate' => 1.61,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Puerto Rico (PR)
+        'PR' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Réunion (RE)
+        'RE' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // Saint Barthélemy (BL)
+        'BL' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // Saint Helena, Ascension and Tristan da Cunha (SH)
+        'SH' => array(
+            'currency_code' => 'SHP',
+            'symbol' => '£',
+            'standardRate' => 1.10,
+            'exchangeRate' => 0.77,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Saint Martin (MF)
+        'MF' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // Saint Pierre and Miquelon (PM)
+        'PM' => array(
+            'currency_code' => 'EUR',
+            'symbol' => '€',
+            'standardRate' => 1.00,
+            'exchangeRate' => 0.94,
+            'thousandAbbreviation' => 'mil'
+        ),
+
+        // Sint Maarten (SX)
+        'SX' => array(
+            'currency_code' => 'ANG',
+            'symbol' => 'ƒ',
+            'standardRate' => 1.10,
+            'exchangeRate' => 1.80,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // South Georgia and the South Sandwich Islands (GS)
+        'GS' => array(
+            'currency_code' => 'GBP',
+            'symbol' => '£',
+            'standardRate' => 1.10,
+            'exchangeRate' => 0.77,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Svalbard and Jan Mayen (SJ)
+        'SJ' => array(
+            'currency_code' => 'NOK',
+            'symbol' => 'kr',
+            'standardRate' => 1.20,
+            'exchangeRate' => 10.63,
+            'thousandAbbreviation' => 'tusen'
+        ),
+
+        // Tokelau (TK)
+        'TK' => array(
+            'currency_code' => 'NZD',
+            'symbol' => 'NZ$',
+            'standardRate' => 1.05,
+            'exchangeRate' => 1.61,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Turks and Caicos Islands (TC)
+        'TC' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // United States Minor Outlying Islands (UM)
+        'UM' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Virgin Islands (British) (VG)
+        'VG' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Virgin Islands (U.S.) (VI)
+        'VI' => array(
+            'currency_code' => 'USD',
+            'symbol' => '$',
+            'standardRate' => 1.00,
+            'exchangeRate' => 1.00,
+            'thousandAbbreviation' => 'K'
+        ),
+
+        // Wallis and Futuna (WF)
+        'WF' => array(
+            'currency_code' => 'XPF',
+            'symbol' => 'Fr',
+            'standardRate' => 0.35,
+            'exchangeRate' => 119.33,
+            'thousandAbbreviation' => 'mille'
+        ),
+
+        // Western Sahara (EH)
+        'EH' => array(
+            'currency_code' => 'MAD', // Moroccan Dirham is commonly used
+            'symbol' => 'د.م.',
+            'standardRate' => 0.50,
+            'exchangeRate' => 10.29,
+            'thousandAbbreviation' => 'K'
+        ),
+		'MO' => array(
+            'currency_code' => 'MOP',
+            'symbol' => 'MOP$',
+            'standardRate' => 1.05, // Based on PPP data
+            'exchangeRate' => 8.00, // Exchange rate from USD to MOP
+            'thousandAbbreviation' => 'K'
+        ),
+	);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 2. Define the symbolCurrencies array in PHP
+ *    - Lists currency symbols that do not require a space between the symbol and the amount.
+ */
+function cwdp_get_symbol_currencies() {
+    return array(
+        '$', '£', '€', '¥', '₽', '₩', '₪', '₨', '฿', '₺', '₫', '₱', '₴', '₦', '₹',
+        '؋', '﷼', '₭', '₮', '₡', '₲', '₵', '₸', '₤', '₳', '₰', '₯', '₠', '₣', '₧',
+        'د.ج', 'ج.م', 'د.ب', 'ج.س', 'ع.د', 'CHF' // Ensure all symbols are included
+    );
+}
+
+/**
+ * 3. Map Currency Names to WooCommerce Currency Codes
+ *    - Maps currency names to their respective WooCommerce currency codes.
+ *    - Includes plural forms and common variations for robustness.
+ */
+function cwdp_get_currency_code_by_currency_name($currency_name) {
+
+    $currency_mapping = array(
+        // Afghanistan
+        'afghani' => 'AFN',
+        'afghanis' => 'AFN',
+
+        // Albania
+        'lek' => 'ALL',
+        'leks' => 'ALL',
+
+        // Algeria
+        'dinar' => 'DZD',
+        'dinars' => 'DZD',
+
+        // Andorra, Kosovo, Monaco, San Marino, Vatican
+        'euro' => 'EUR',
+        'euros' => 'EUR',
+
+        // Angola
+        'kwanza' => 'AOA',
+        'kwanzas' => 'AOA',
+
+        // Antigua and Barbuda, Dominica, Grenada, Saint Kitts and Nevis, Saint Lucia, Saint Vincent and the Grenadines
+        'east caribbean dollar' => 'XCD',
+        'east caribbean dollars' => 'XCD',
+
+        // Argentina
+        'argentine peso' => 'ARS',
+        'argentine pesos' => 'ARS',
+
+        // Armenia
+        'dram' => 'AMD',
+        'drams' => 'AMD',
+
+        // Australia, Nauru, Kiribati, Tuvalu
+        'australian dollar' => 'AUD',
+        'australian dollars' => 'AUD',
+
+        // Azerbaijan
+        'manat' => 'AZN',
+        'manats' => 'AZN',
+
+        // Bahamas
+        'bahamian dollar' => 'BSD',
+        'bahamian dollars' => 'BSD',
+
+        // Bahrain
+        'bahraini dinar' => 'BHD',
+        'bahraini dinars' => 'BHD',
+
+        // Bangladesh
+        'taka' => 'BDT',
+        'takas' => 'BDT',
+
+        // Barbados
+        'barbadian dollar' => 'BBD',
+        'barbadian dollars' => 'BBD',
+
+        // Belarus
+        'belarusian ruble' => 'BYN',
+        'belarusian rubles' => 'BYN',
+
+        // Belize
+        'belize dollar' => 'BZD',
+        'belize dollars' => 'BZD',
+
+        // Benin, Burkina Faso, Guinea-Bissau, Ivory Coast, Mali, Niger, Senegal, Togo
+        'west african cfa franc' => 'XOF',
+        'west african cfa francs' => 'XOF',
+
+        // Bhutan
+        'ngultrum' => 'BTN',
+        'ngultrums' => 'BTN',
+
+        // Bolivia
+        'boliviano' => 'BOB',
+        'bolivianos' => 'BOB',
+
+        // Bosnia and Herzegovina
+        'convertible mark' => 'BAM',
+        'convertible marks' => 'BAM',
+
+        // Botswana
+        'pula' => 'BWP',
+        'pulas' => 'BWP',
+
+        // Brazil
+        'brazilian real' => 'BRL',
+        'brazilian reals' => 'BRL',
+
+        // Brunei
+        'brunei dollar' => 'BND',
+        'brunei dollars' => 'BND',
+
+        // Bulgaria
+        'lev' => 'BGN',
+        'levs' => 'BGN',
+
+        // Burundi
+        'burundian franc' => 'BIF',
+        'burundian francs' => 'BIF',
+
+        // Cape Verde
+        'cape verdean escudo' => 'CVE',
+        'cape verdean escudos' => 'CVE',
+
+        // Cambodia
+        'riel' => 'KHR',
+        'riels' => 'KHR',
+
+        // Cameroon, Central African Republic, Chad, Congo, Gabon, Equatorial Guinea
+        'central african cfa franc' => 'XAF',
+        'central african cfa francs' => 'XAF',
+
+        // French Polynesia, New Caledonia, Wallis and Futuna
+        'cfp franc' => 'XPF',
+        'cfp francs' => 'XPF',
+
+        // Canada
+        'canadian dollar' => 'CAD',
+        'canadian dollars' => 'CAD',
+
+        // Chile
+        'chilean peso' => 'CLP',
+        'chilean pesos' => 'CLP',
+
+        // China
+        'yuan renminbi' => 'CNY',
+        'yuan renminbis' => 'CNY',
+
+        // Colombia
+        'colombian peso' => 'COP',
+        'colombian pesos' => 'COP',
+
+        // Comoros
+        'comorian franc' => 'KMF',
+        'comorian francs' => 'KMF',
+
+        // DR Congo
+        'congolese franc' => 'CDF',
+        'congolese francs' => 'CDF',
+
+        // Costa Rica
+        'costa rican colón' => 'CRC',
+        'costa rican colónes' => 'CRC',
+
+        // Croatia (transitioning to Euro in 2024)
+        'croatian kuna' => 'HRK',
+        'croatian kunas' => 'HRK',
+
+        // Cuba
+        'cuban peso' => 'CUP',
+        'cuban pesos' => 'CUP',
+
+        // Czechia
+        'czech koruna' => 'CZK',
+        'czech korunas' => 'CZK',
+
+        // Denmark, Greenland, Faroe Islands
+        'danish krone' => 'DKK',
+        'danish krones' => 'DKK',
+
+        // Djibouti
+        'djiboutian franc' => 'DJF',
+        'djiboutian francs' => 'DJF',
+
+        // Dominican Republic
+        'dominican peso' => 'DOP',
+        'dominican pesos' => 'DOP',
+
+        // United States, El Salvador, East Timor, Ecuador, Panama, Zimbabwe, Micronesia, Palau, Marshall Islands
+        'us dollar' => 'USD',
+        'us dollars' => 'USD',
+
+        // Egypt
+        'egyptian pound' => 'EGP',
+        'egyptian pounds' => 'EGP',
+
+        // Eritrea
+        'nakfa' => 'ERN',
+        'nakfas' => 'ERN',
+
+        // Ethiopia
+        'birr' => 'ETB',
+        'birrs' => 'ETB',
+
+        // Fiji
+        'fijian dollar' => 'FJD',
+        'fijian dollars' => 'FJD',
+
+        // Gambia
+        'dalasi' => 'GMD',
+        'dalasis' => 'GMD',
+
+        // Georgia
+        'lari' => 'GEL',
+        'laris' => 'GEL',
+
+        // Ghana
+        'ghanaian cedi' => 'GHS',
+        'ghanaian cedis' => 'GHS',
+
+        // Gibraltar
+        'gibraltar pound' => 'GIP',
+        'gibraltar pounds' => 'GIP',
+
+        // Guinea
+        'guinean franc' => 'GNF',
+        'guinean francs' => 'GNF',
+
+        // Guatemala
+        'guatemalan quetzal' => 'GTQ',
+        'guatemalan quetzals' => 'GTQ',
+
+        // Guyana
+        'guyanese dollar' => 'GYD',
+        'guyanese dollars' => 'GYD',
+
+        // Haiti
+        'haitian gourde' => 'HTG',
+        'haitian gourdes' => 'HTG',
+
+        // Honduras
+        'honduran lempira' => 'HNL',
+        'honduran lempiras' => 'HNL',
+
+        // Hong Kong
+        'hong kong dollar' => 'HKD',
+        'hong kong dollars' => 'HKD',
+
+        // Hungary
+        'hungarian forint' => 'HUF',
+        'hungarian forints' => 'HUF',
+
+        // Iceland
+        'icelandic króna' => 'ISK',
+        'icelandic krónas' => 'ISK',
+
+        // India, Bhutan
+        'indian rupee' => 'INR',
+        'indian rupees' => 'INR',
+
+        // Indonesia
+        'indonesian rupiah' => 'IDR',
+        'indonesian rupiahs' => 'IDR',
+
+        // Iraq
+        'iraqi dinar' => 'IQD',
+        'iraqi dinars' => 'IQD',
+
+        // Iran
+        'iranian rial' => 'IRR',
+        'iranian rials' => 'IRR',
+
+        // Israel, Palestine
+        'new israeli shekel' => 'ILS',
+        'new israeli shekels' => 'ILS',
+        'israeli new shekel' => 'ILS',
+        'israeli new shekels' => 'ILS',
+
+        // Jamaica
+        'jamaican dollar' => 'JMD',
+        'jamaican dollars' => 'JMD',
+
+        // Japan
+        'japanese yen' => 'JPY',
+        'japanese yens' => 'JPY',
+
+        // Jordan
+        'jordanian dinar' => 'JOD',
+        'jordanian dinars' => 'JOD',
+
+        // Kazakhstan
+        'kazakhstani tenge' => 'KZT',
+        'kazakhstani tenges' => 'KZT',
+
+        // Kenya
+        'kenyan shilling' => 'KES',
+        'kenyan shillings' => 'KES',
+
+        // Kuwait
+        'kuwaiti dinar' => 'KWD',
+        'kuwaiti dinars' => 'KWD',
+
+        // Kyrgyzstan
+        'kyrgyzstani som' => 'KGS',
+        'kyrgyzstani soms' => 'KGS',
+
+        // Laos
+        'laotian kip' => 'LAK',
+        'laotian kips' => 'LAK',
+
+        // Lebanon
+        'lebanese pound' => 'LBP',
+        'lebanese pounds' => 'LBP',
+
+        // Lesotho
+        'lesotho loti' => 'LSL',
+        'lesotho lotis' => 'LSL',
+
+        // Liberia
+        'liberian dollar' => 'LRD',
+        'liberian dollars' => 'LRD',
+
+        // Libya
+        'libyan dinar' => 'LYD',
+        'libyan dinars' => 'LYD',
+
+        // Macau
+        'macanese pataca' => 'MOP',
+        'macanese patacas' => 'MOP',
+
+        // North Macedonia
+        'macedonian denar' => 'MKD',
+        'macedonian denars' => 'MKD',
+
+        // Madagascar
+        'malagasy ariary' => 'MGA',
+        'malagasy ariaries' => 'MGA',
+
+        // Malawi
+        'malawian kwacha' => 'MWK',
+        'malawian kwachas' => 'MWK',
+
+        // Malaysia
+        'malaysian ringgit' => 'MYR',
+        'malaysian ringgits' => 'MYR',
+
+        // Maldives
+        'maldivian rufiyaa' => 'MVR',
+        'maldivian rufiyyas' => 'MVR',
+
+        // Mauritania
+        'mauritanian ouguiya' => 'MRU',
+        'mauritanian ouguiyas' => 'MRU',
+
+        // Mauritius
+        'mauritian rupee' => 'MUR',
+        'mauritian rupees' => 'MUR',
+
+        // Mexico
+        'mexican peso' => 'MXN',
+        'mexican pesos' => 'MXN',
+
+        // Moldova
+        'moldovan leu' => 'MDL',
+        'moldovan leus' => 'MDL',
+
+        // Mongolia
+        'mongolian tugrik' => 'MNT',
+        'mongolian tugriks' => 'MNT',
+
+        // Morocco, Western Sahara
+        'moroccan dirham' => 'MAD',
+        'moroccan dirhams' => 'MAD',
+
+        // Mozambique
+        'mozambican metical' => 'MZN',
+        'mozambican meticals' => 'MZN',
+
+        // Myanmar
+        'myanma kyat' => 'MMK',
+        'myanma kyats' => 'MMK',
+
+        // Namibia
+        'namibian dollar' => 'NAD',
+        'namibian dollars' => 'NAD',
+
+        // Nepal
+        'nepalese rupee' => 'NPR',
+        'nepalese rupees' => 'NPR',
+
+        // Curaçao, Sint Maarten
+        'netherlands antillean guilder' => 'ANG',
+        'netherlands antillean guilders' => 'ANG',
+
+        // New Zealand, Niue, Pitcairn Islands, Tokelau, Cook Islands
+        'new zealand dollar' => 'NZD',
+        'new zealand dollars' => 'NZD',
+
+        // Nicaragua
+        'nicaraguan córdoba' => 'NIO',
+        'nicaraguan córdobas' => 'NIO',
+
+        // Nigeria
+        'nigerian naira' => 'NGN',
+        'nigerian nairas' => 'NGN',
+
+        // Norway
+        'norwegian krone' => 'NOK',
+        'norwegian kroner' => 'NOK',
+
+        // Oman
+        'omani rial' => 'OMR',
+        'omani rials' => 'OMR',
+
+        // Pakistan
+        'pakistani rupee' => 'PKR',
+        'pakistani rupees' => 'PKR',
+
+        // Panama
+        'panamanian balboa' => 'PAB',
+        'panamanian balboas' => 'PAB',
+
+        // Papua New Guinea
+        'papua new guinean kina' => 'PGK',
+        'papua new guinean kinas' => 'PGK',
+
+        // Paraguay
+        'paraguayan guarani' => 'PYG',
+        'paraguayan guaranis' => 'PYG',
+
+        // Peru
+        'peruvian sol' => 'PEN',
+        'peruvian soles' => 'PEN',
+
+        // Philippines
+        'philippine peso' => 'PHP',
+        'philippine pesos' => 'PHP',
+
+        // Poland
+        'polish zloty' => 'PLN',
+        'polish zlotys' => 'PLN',
+
+        // Qatar
+        'qatari riyal' => 'QAR',
+        'qatari riyals' => 'QAR',
+
+        // Romania
+        'romanian leu' => 'RON',
+        'romanian lei' => 'RON',
+
+        // Russia
+        'russian ruble' => 'RUB',
+        'russian rubles' => 'RUB',
+
+        // Rwanda
+        'rwandan franc' => 'RWF',
+        'rwandan francs' => 'RWF',
+
+        // Saudi Arabia
+        'saudi riyal' => 'SAR',
+        'saudi riyals' => 'SAR',
+
+        // Serbia
+        'serbian dinar' => 'RSD',
+        'serbian dinars' => 'RSD',
+
+        // Seychelles
+        'seychellois rupee' => 'SCR',
+        'seychellois rupees' => 'SCR',
+
+        // Sierra Leone
+        'sierra leonean leone' => 'SLL',
+        'sierra leonean leones' => 'SLL',
+
+        // Singapore
+        'singapore dollar' => 'SGD',
+        'singapore dollars' => 'SGD',
+
+        // Slovakia (Legacy Support)
+        'slovak koruna' => 'SKK',
+        'slovak korunas' => 'SKK',
+
+        // South Africa
+        'south african rand' => 'ZAR',
+        'south african rands' => 'ZAR',
+
+        // South Korea
+        'south korean won' => 'KRW',
+        'south korean wons' => 'KRW',
+
+        // South Sudan
+        'south sudanese pound' => 'SSP',
+        'south sudanese pounds' => 'SSP',
+
+        // Sri Lanka
+        'sri lankan rupee' => 'LKR',
+        'sri lankan rupees' => 'LKR',
+
+        // Sudan
+        'sudanese pound' => 'SDG',
+        'sudanese pounds' => 'SDG',
+
+        // Suriname
+        'surinamese dollar' => 'SRD',
+        'surinamese dollars' => 'SRD',
+
+        // Eswatini (Swaziland)
+        'swazi lilangeni' => 'SZL',
+        'swazi lilangenis' => 'SZL',
+
+        // Sweden
+        'swedish krona' => 'SEK',
+        'swedish kronor' => 'SEK',
+
+        // Switzerland, Liechtenstein
+        'swiss franc' => 'CHF',
+        'swiss francs' => 'CHF',
+
+        // Syria
+        'syrian pound' => 'SYP',
+        'syrian pounds' => 'SYP',
+
+        // Taiwan
+        'taiwan dollar' => 'TWD',
+        'taiwan dollars' => 'TWD',
+
+        // Tanzania
+        'tanzanian shilling' => 'TZS',
+        'tanzanian shillings' => 'TZS',
+
+        // Thailand
+        'thai baht' => 'THB',
+        'thai bahts' => 'THB',
+
+        // Tonga
+        'tongan paʻanga' => 'TOP',
+        'tongan paʻangas' => 'TOP',
+
+        // Trinidad and Tobago
+        'trinidad and tobago dollar' => 'TTD',
+        'trinidad and tobago dollars' => 'TTD',
+
+        // Tunisia
+        'tunisian dinar' => 'TND',
+        'tunisian dinars' => 'TND',
+
+        // Turkey
+        'turkish lira' => 'TRY',
+        'turkish liras' => 'TRY',
+
+        // Turkmenistan
+        'turkmenistani manat' => 'TMT',
+        'turkmenistani manats' => 'TMT',
+
+        // United Arab Emirates
+        'uae dirham' => 'AED',
+        'uae dirhams' => 'AED',
+
+        // Uganda
+        'ugandan shilling' => 'UGX',
+        'ugandan shillings' => 'UGX',
+
+        // Ukraine
+        'ukrainian hryvnia' => 'UAH',
+        'ukrainian hryvnias' => 'UAH',
+
+        // Uruguay
+        'uruguayan peso' => 'UYU',
+        'uruguayan pesos' => 'UYU',
+
+        // Uzbekistan
+        'uzbekistani som' => 'UZS',
+        'uzbekistani soms' => 'UZS',
+
+        // Vanuatu
+        'vanuatu vatu' => 'VUV',
+        'vanuatu vatūs' => 'VUV',
+
+        // Venezuela
+        'venezuelan bolívar' => 'VES',
+        'venezuelan bolívares' => 'VES',
+
+        // Vietnam
+        'vietnamese dong' => 'VND',
+        'vietnamese dongs' => 'VND',
+
+        // Yemen
+        'yemeni rial' => 'YER',
+        'yemeni rials' => 'YER',
+
+        // Zambia
+        'zambian kwacha' => 'ZMW',
+        'zambian kwachas' => 'ZMW',
+
+        // Zimbabwe
+        'zimbabwean dollar' => 'ZWL',
+        'zimbabwean dollars' => 'ZWL',
+
+        // United Kingdom (includes Guernsey, Isle of Man, Jersey)
+        'british pound' => 'GBP',
+        'british pounds' => 'GBP',
+
+        // Solomon Islands
+        'solomon islands dollar' => 'SBD',
+        'solomon islands dollars' => 'SBD',
+
+        // Additional Variations
+        'israeli new shekel' => 'ILS',
+        'israeli new shekels' => 'ILS',
+        'north korean won' => 'KPW',
+        'north korean wons' => 'KPW',
+        'swazi lilangenis' => 'SZL', // Corrected plural
+        'srilankan rupee' => 'LKR', // Alternative spelling
+    );
+
+    $normalized_currency_name = strtolower($currency_name); // Normalize to lowercase
+
+    if (isset($currency_mapping[$normalized_currency_name])) {
+        return $currency_mapping[$normalized_currency_name];
+    } else {
+        error_log("Custom WooCommerce Dynamic Pricing: Undefined currency name '{$currency_name}'. Defaulting to 'USD'.");
+        return 'USD';
+    }
+}
+
+	
+/**
+ * 4. Add Custom Currencies to WooCommerce
+ */
+function cwdp_add_custom_currencies( $currencies ) {
+    $currencies['AED'] = __( 'UAE Dirham', 'woocommerce' );
+    $currencies['AFN'] = __( 'Afghan Afghani', 'woocommerce' );
+    $currencies['ALL'] = __( 'Albanian Lek', 'woocommerce' );
+    $currencies['AMD'] = __( 'Armenian Dram', 'woocommerce' );
+    $currencies['ANG'] = __( 'Aruban Florin', 'woocommerce' );
+    $currencies['AOA'] = __( 'Angolan Kwanza', 'woocommerce' );
+    $currencies['ARS'] = __( 'Argentine Peso', 'woocommerce' );
+    $currencies['AUD'] = __( 'Australian Dollar', 'woocommerce' );
+    $currencies['AWG'] = __( 'Aruban Florin', 'woocommerce' );
+    $currencies['AZN'] = __( 'Azerbaijani Manat', 'woocommerce' );
+    $currencies['BAM'] = __( 'Bosnia-Herzegovina Convertible Mark', 'woocommerce' );
+    $currencies['BBD'] = __( 'Barbadian Dollar', 'woocommerce' );
+    $currencies['BDT'] = __( 'Bangladeshi Taka', 'woocommerce' );
+    $currencies['BGN'] = __( 'Bulgarian Lev', 'woocommerce' );
+    $currencies['BIF'] = __( 'Burundian Franc', 'woocommerce' );
+    $currencies['BMD'] = __( 'Bermudian Dollar', 'woocommerce' );
+    $currencies['BND'] = __( 'Brunei Dollar', 'woocommerce' );
+    $currencies['BOB'] = __( 'Bolivian Boliviano', 'woocommerce' );
+    $currencies['BRL'] = __( 'Brazilian Real', 'woocommerce' );
+    $currencies['BSD'] = __( 'Bahamian Dollar', 'woocommerce' );
+    $currencies['BWP'] = __( 'Botswana Pula', 'woocommerce' );
+    $currencies['BYN'] = __( 'Belarusian Ruble', 'woocommerce' );
+    $currencies['BZD'] = __( 'Belize Dollar', 'woocommerce' );
+    $currencies['CAD'] = __( 'Canadian Dollar', 'woocommerce' );
+    $currencies['CDF'] = __( 'Congolese Franc', 'woocommerce' );
+    $currencies['CHF'] = __( 'Swiss Franc', 'woocommerce' );
+    $currencies['CLP'] = __( 'Chilean Peso', 'woocommerce' );
+    $currencies['CNY'] = __( 'Chinese Yuan Renminbi', 'woocommerce' );
+    $currencies['COP'] = __( 'Colombian Peso', 'woocommerce' );
+    $currencies['CRC'] = __( 'Costa Rican Colón', 'woocommerce' );
+    $currencies['CVE'] = __( 'Cape Verdean Escudo', 'woocommerce' );
+    $currencies['CZK'] = __( 'Czech Koruna', 'woocommerce' );
+    $currencies['DJF'] = __( 'Djiboutian Franc', 'woocommerce' );
+    $currencies['DKK'] = __( 'Danish Krone', 'woocommerce' );
+    $currencies['DOP'] = __( 'Dominican Peso', 'woocommerce' );
+    $currencies['DZD'] = __( 'Algerian Dinar', 'woocommerce' );
+    $currencies['EGP'] = __( 'Egyptian Pound', 'woocommerce' );
+    $currencies['ETB'] = __( 'Ethiopian Birr', 'woocommerce' );
+    $currencies['EUR'] = __( 'Euro', 'woocommerce' );
+    $currencies['FJD'] = __( 'Fijian Dollar', 'woocommerce' );
+    $currencies['FKP'] = __( 'Falkland Islands Pound', 'woocommerce' );
+    $currencies['GBP'] = __( 'British Pound', 'woocommerce' );
+    $currencies['GEL'] = __( 'Georgian Lari', 'woocommerce' );
+    $currencies['GIP'] = __( 'Gibraltar Pound', 'woocommerce' );
+    $currencies['GMD'] = __( 'Gambian Dalasi', 'woocommerce' );
+    $currencies['GNF'] = __( 'Guinean Franc', 'woocommerce' );
+    $currencies['GTQ'] = __( 'Guatemalan Quetzal', 'woocommerce' );
+    $currencies['GYD'] = __( 'Guyanese Dollar', 'woocommerce' );
+    $currencies['HKD'] = __( 'Hong Kong Dollar', 'woocommerce' );
+    $currencies['HNL'] = __( 'Honduran Lempira', 'woocommerce' );
+    $currencies['HTG'] = __( 'Haitian Gourde', 'woocommerce' );
+    $currencies['HUF'] = __( 'Hungarian Forint', 'woocommerce' );
+    $currencies['IDR'] = __( 'Indonesian Rupiah', 'woocommerce' );
+    $currencies['ILS'] = __( 'New Israeli Shekel', 'woocommerce' );
+    $currencies['INR'] = __( 'Indian Rupee', 'woocommerce' );
+    $currencies['ISK'] = __( 'Icelandic Króna', 'woocommerce' );
+    $currencies['JMD'] = __( 'Jamaican Dollar', 'woocommerce' );
+    $currencies['JPY'] = __( 'Japanese Yen', 'woocommerce' );
+    $currencies['KES'] = __( 'Kenyan Shilling', 'woocommerce' );
+    $currencies['KGS'] = __( 'Kyrgyzstani Som', 'woocommerce' );
+    $currencies['KHR'] = __( 'Cambodian Riel', 'woocommerce' );
+    $currencies['KMF'] = __( 'Comorian Franc', 'woocommerce' );
+    $currencies['KRW'] = __( 'South Korean Won', 'woocommerce' );
+    $currencies['KYD'] = __( 'Cayman Islands Dollar', 'woocommerce' );
+    $currencies['KZT'] = __( 'Kazakhstani Tenge', 'woocommerce' );
+    $currencies['LAK'] = __( 'Laotian Kip', 'woocommerce' );
+    $currencies['LBP'] = __( 'Lebanese Pound', 'woocommerce' );
+    $currencies['LKR'] = __( 'Sri Lankan Rupee', 'woocommerce' );
+    $currencies['LRD'] = __( 'Liberian Dollar', 'woocommerce' );
+    $currencies['LSL'] = __( 'Lesotho Loti', 'woocommerce' );
+    $currencies['LYD'] = __( 'Libyan Dinar', 'woocommerce' );
+    $currencies['MAD'] = __( 'Moroccan Dirham', 'woocommerce' );
+    $currencies['MDL'] = __( 'Moldovan Leu', 'woocommerce' );
+    $currencies['MGA'] = __( 'Malagasy Ariary', 'woocommerce' );
+    $currencies['MKD'] = __( 'Macedonian Denar', 'woocommerce' );
+    $currencies['MMK'] = __( 'Myanma Kyat', 'woocommerce' );
+    $currencies['MNT'] = __( 'Mongolian Tugrik', 'woocommerce' );
+    $currencies['MOP'] = __( 'Macanese Pataca', 'woocommerce' );
+    $currencies['MUR'] = __( 'Mauritian Rupee', 'woocommerce' );
+    $currencies['MVR'] = __( 'Maldivian Rufiyaa', 'woocommerce' );
+    $currencies['MWK'] = __( 'Malawian Kwacha', 'woocommerce' );
+    $currencies['MXN'] = __( 'Mexican Peso', 'woocommerce' );
+    $currencies['MYR'] = __( 'Malaysian Ringgit', 'woocommerce' );
+    $currencies['MZN'] = __( 'Mozambican Metical', 'woocommerce' );
+    $currencies['NAD'] = __( 'Namibian Dollar', 'woocommerce' );
+    $currencies['NGN'] = __( 'Nigerian Naira', 'woocommerce' );
+    $currencies['NIO'] = __( 'Nicaraguan Córdoba', 'woocommerce' );
+    $currencies['NOK'] = __( 'Norwegian Krone', 'woocommerce' );
+    $currencies['NPR'] = __( 'Nepalese Rupee', 'woocommerce' );
+    $currencies['NZD'] = __( 'New Zealand Dollar', 'woocommerce' );
+    $currencies['PAB'] = __( 'Panamanian Balboa', 'woocommerce' );
+    $currencies['PEN'] = __( 'Peruvian Sol', 'woocommerce' );
+    $currencies['PGK'] = __( 'Papua New Guinean Kina', 'woocommerce' );
+    $currencies['PHP'] = __( 'Philippine Peso', 'woocommerce' );
+    $currencies['PLN'] = __( 'Polish Zloty', 'woocommerce' );
+    $currencies['PYG'] = __( 'Paraguayan Guarani', 'woocommerce' );
+    $currencies['QAR'] = __( 'Qatari Riyal', 'woocommerce' );
+    $currencies['RON'] = __( 'Romanian Leu', 'woocommerce' );
+    $currencies['RSD'] = __( 'Serbian Dinar', 'woocommerce' );
+    $currencies['RUB'] = __( 'Russian Ruble', 'woocommerce' );
+    $currencies['RWF'] = __( 'Rwandan Franc', 'woocommerce' );
+    $currencies['SAR'] = __( 'Saudi Riyal', 'woocommerce' );
+    $currencies['SBD'] = __( 'Solomon Islands Dollar', 'woocommerce' );
+    $currencies['SCR'] = __( 'Seychellois Rupee', 'woocommerce' );
+    $currencies['SEK'] = __( 'Swedish Krona', 'woocommerce' );
+    $currencies['SGD'] = __( 'Singapore Dollar', 'woocommerce' );
+    $currencies['SHP'] = __( 'Saint Helena Pound', 'woocommerce' );
+    $currencies['SLE'] = __( 'Sierra Leonean Leone', 'woocommerce' );
+    $currencies['SLL'] = __( 'Sierra Leonean Leone', 'woocommerce' );
+    $currencies['SOS'] = __( 'Somali Shilling', 'woocommerce' );
+    $currencies['SRD'] = __( 'Surinamese Dollar', 'woocommerce' );
+    $currencies['STD'] = __( 'São Tomé and Príncipe Dobra', 'woocommerce' );
+    $currencies['SZL'] = __( 'Swazi Lilangeni', 'woocommerce' );
+    $currencies['SEK'] = __( 'Swedish Krona', 'woocommerce' );
+    $currencies['SEK'] = __( 'Swedish Krona', 'woocommerce' );
+    $currencies['CHF'] = __( 'Swiss Franc', 'woocommerce' );
+    $currencies['SYP'] = __( 'Syrian Pound', 'woocommerce' );
+    $currencies['TWD'] = __( 'New Taiwan Dollar', 'woocommerce' );
+    $currencies['TZS'] = __( 'Tanzanian Shilling', 'woocommerce' );
+    $currencies['THB'] = __( 'Thai Baht', 'woocommerce' );
+    $currencies['TOP'] = __( 'Tongan Paʻanga', 'woocommerce' );
+    $currencies['TTD'] = __( 'Trinidad and Tobago Dollar', 'woocommerce' );
+    $currencies['TRY'] = __( 'Turkish Lira', 'woocommerce' );
+    $currencies['TWD'] = __( 'New Taiwan Dollar', 'woocommerce' );
+    $currencies['TJS'] = __( 'Tajikistani Somoni', 'woocommerce' );
+    $currencies['TZS'] = __( 'Tanzanian Shilling', 'woocommerce' );
+    $currencies['UAH'] = __( 'Ukrainian Hryvnia', 'woocommerce' );
+    $currencies['UGX'] = __( 'Ugandan Shilling', 'woocommerce' );
+    $currencies['USD'] = __( 'US Dollar', 'woocommerce' );
+    $currencies['UYU'] = __( 'Uruguayan Peso', 'woocommerce' );
+    $currencies['UZS'] = __( 'Uzbekistani Som', 'woocommerce' );
+    $currencies['VND'] = __( 'Vietnamese Dong', 'woocommerce' );
+    $currencies['VUV'] = __( 'Vanuatu Vatu', 'woocommerce' );
+    $currencies['WST'] = __( 'Samoan Tala', 'woocommerce' );
+    $currencies['XAF'] = __( 'Central African CFA Franc', 'woocommerce' );
+    $currencies['XCD'] = __( 'East Caribbean Dollar', 'woocommerce' );
+    $currencies['XOF'] = __( 'West African CFA Franc', 'woocommerce' );
+    $currencies['XPF'] = __( 'CFP Franc', 'woocommerce' );
+    $currencies['YER'] = __( 'Yemeni Rial', 'woocommerce' );
+    $currencies['ZAR'] = __( 'South African Rand', 'woocommerce' );
+    $currencies['ZMW'] = __( 'Zambian Kwacha', 'woocommerce' );
+    return $currencies;
+}
+add_filter( 'woocommerce_currencies', 'cwdp_add_custom_currencies' );
+
+
+
+/**
+ * 5. Add Custom Currency Symbols to WooCommerce
+ */
+/**
+ * Add Custom Currency Symbols to WooCommerce
+ */
+
+
+function cwdp_add_custom_currency_symbols( $currency_symbol, $currency ) {
+    switch( $currency ) {
+        case 'AED':
+            $currency_symbol = 'د.إ';
+            break;
+        case 'AFN':
+            $currency_symbol = '؋';
+            break;
+        case 'ALL':
+            $currency_symbol = 'L';
+            break;
+        case 'AMD':
+            $currency_symbol = '֏';
+            break;
+        case 'ANG':
+            $currency_symbol = 'ƒ';
+            break;
+        case 'AOA':
+            $currency_symbol = 'Kz';
+            break;
+        case 'ARS':
+            $currency_symbol = '$';
+            break;
+        case 'AUD':
+            $currency_symbol = 'A$';
+            break;
+        case 'AWG':
+            $currency_symbol = 'ƒ';
+            break;
+        case 'AZN':
+            $currency_symbol = '₼';
+            break;
+        case 'BAM':
+            $currency_symbol = 'KM';
+            break;
+        case 'BBD':
+            $currency_symbol = 'Bds$';
+            break;
+        case 'BDT':
+            $currency_symbol = '৳';
+            break;
+        case 'BGN':
+            $currency_symbol = 'лв';
+            break;
+        case 'BIF':
+            $currency_symbol = 'FBu';
+            break;
+        case 'BMD':
+            $currency_symbol = 'BD$';
+            break;
+        case 'BND':
+            $currency_symbol = 'B$';
+            break;
+        case 'BOB':
+            $currency_symbol = 'Bs';
+            break;
+        case 'BRL':
+            $currency_symbol = 'R$';
+            break;
+        case 'BSD':
+            $currency_symbol = 'B$';
+            break;
+        case 'BWP':
+            $currency_symbol = 'P';
+            break;
+        case 'BYN':
+            $currency_symbol = 'Br';
+            break;
+        case 'BZD':
+            $currency_symbol = 'BZ$';
+            break;
+        case 'CAD':
+            $currency_symbol = 'C$';
+            break;
+        case 'CDF':
+            $currency_symbol = 'FC';
+            break;
+        case 'CHF':
+            $currency_symbol = 'CHF';
+            break;
+        case 'CLP':
+            $currency_symbol = '$';
+            break;
+        case 'CNY':
+            $currency_symbol = '¥';
+            break;
+        case 'COP':
+            $currency_symbol = '$';
+            break;
+        case 'CRC':
+            $currency_symbol = '₡';
+            break;
+        case 'CVE':
+            $currency_symbol = '$';
+            break;
+        case 'CZK':
+            $currency_symbol = 'Kč';
+            break;
+        case 'DJF':
+            $currency_symbol = 'Fdj';
+            break;
+        case 'DKK':
+            $currency_symbol = 'kr';
+            break;
+        case 'DOP':
+            $currency_symbol = 'RD$';
+            break;
+        case 'DZD':
+            $currency_symbol = 'د.ج';
+            break;
+        case 'EGP':
+            $currency_symbol = 'ج.م';
+            break;
+        case 'ETB':
+            $currency_symbol = 'Br';
+            break;
+        case 'EUR':
+            $currency_symbol = '€';
+            break;
+        case 'FJD':
+            $currency_symbol = 'FJ$';
+            break;
+        case 'FKP':
+            $currency_symbol = '£';
+            break;
+        case 'GBP':
+            $currency_symbol = '£';
+            break;
+        case 'GEL':
+            $currency_symbol = '₾';
+            break;
+        case 'GIP':
+            $currency_symbol = '£';
+            break;
+        case 'GMD':
+            $currency_symbol = 'D';
+            break;
+        case 'GNF':
+            $currency_symbol = 'FG';
+            break;
+        case 'GTQ':
+            $currency_symbol = 'Q';
+            break;
+        case 'GYD':
+            $currency_symbol = 'G$';
+            break;
+        case 'HKD':
+            $currency_symbol = 'HK$';
+            break;
+        case 'HNL':
+            $currency_symbol = 'L';
+            break;
+        case 'HTG':
+            $currency_symbol = 'G';
+            break;
+        case 'HUF':
+            $currency_symbol = 'Ft';
+            break;
+        case 'IDR':
+            $currency_symbol = 'Rp';
+            break;
+        case 'ILS':
+            $currency_symbol = '₪';
+            break;
+        case 'INR':
+            $currency_symbol = '₹';
+            break;
+        case 'ISK':
+            $currency_symbol = 'kr';
+            break;
+        case 'JMD':
+            $currency_symbol = 'J$';
+            break;
+        case 'JPY':
+            $currency_symbol = '¥';
+            break;
+        case 'KES':
+            $currency_symbol = 'KSh';
+            break;
+        case 'KGS':
+            $currency_symbol = 'с';
+            break;
+        case 'KHR':
+            $currency_symbol = '៛';
+            break;
+        case 'KMF':
+            $currency_symbol = 'CF';
+            break;
+        case 'KRW':
+            $currency_symbol = '₩';
+            break;
+        case 'KYD':
+            $currency_symbol = 'KY$';
+            break;
+        case 'KZT':
+            $currency_symbol = '₸';
+            break;
+        case 'LAK':
+            $currency_symbol = '₭';
+            break;
+        case 'LBP':
+            $currency_symbol = 'ل.ل';
+            break;
+        case 'LKR':
+            $currency_symbol = 'Rs';
+            break;
+        case 'LRD':
+            $currency_symbol = 'L$';
+            break;
+        case 'LSL':
+            $currency_symbol = 'L';
+            break;
+        case 'LYD':
+            $currency_symbol = 'ل.د';
+            break;
+        case 'MAD':
+            $currency_symbol = 'د.م.';
+            break;
+        case 'MDL':
+            $currency_symbol = 'L';
+            break;
+        case 'MGA':
+            $currency_symbol = 'Ar';
+            break;
+        case 'MKD':
+            $currency_symbol = 'ден';
+            break;
+        case 'MMK':
+            $currency_symbol = 'K';
+            break;
+        case 'MNT':
+            $currency_symbol = '₮';
+            break;
+        case 'MOP':
+            $currency_symbol = 'MOP$';
+            break;
+        case 'MUR':
+            $currency_symbol = 'Rs';
+            break;
+        case 'MVR':
+            $currency_symbol = 'ރ';
+            break;
+        case 'MWK':
+            $currency_symbol = 'MK';
+            break;
+        case 'MXN':
+            $currency_symbol = 'mx$';
+            break;
+        case 'MYR':
+            $currency_symbol = 'RM';
+            break;
+        case 'MZN':
+            $currency_symbol = 'MT';
+            break;
+        case 'NAD':
+            $currency_symbol = 'N$';
+            break;
+        case 'NGN':
+            $currency_symbol = '₦';
+            break;
+        case 'NIO':
+            $currency_symbol = 'C$';
+            break;
+        case 'NOK':
+            $currency_symbol = 'kr';
+            break;
+        case 'NPR':
+            $currency_symbol = 'रू';
+            break;
+        case 'NZD':
+            $currency_symbol = 'NZ$';
+            break;
+        case 'PAB':
+            $currency_symbol = 'B/.';
+            break;
+        case 'PEN':
+            $currency_symbol = 'S/.';
+            break;
+        case 'PGK':
+            $currency_symbol = 'K';
+            break;
+        case 'PHP':
+            $currency_symbol = '₱';
+            break;
+        case 'PLN':
+            $currency_symbol = 'zł';
+            break;
+        case 'PYG':
+            $currency_symbol = 'Gs';
+            break;
+        case 'QAR':
+            $currency_symbol = 'ر.ق';
+            break;
+        case 'RON':
+            $currency_symbol = 'lei';
+            break;
+        case 'RSD':
+            $currency_symbol = 'дин';
+            break;
+        case 'RUB':
+            $currency_symbol = '₽';
+            break;
+        case 'RWF':
+            $currency_symbol = 'Fr';
+            break;
+        case 'SAR':
+            $currency_symbol = 'ر.س';
+            break;
+        case 'SBD':
+            $currency_symbol = 'SI$';
+            break;
+        case 'SCR':
+            $currency_symbol = '₨';
+            break;
+        case 'SLE':
+            $currency_symbol = 'Le';
+            break;
+        case 'SLL':
+            $currency_symbol = 'Le';
+            break;
+        case 'SOS':
+            $currency_symbol = 'S';
+            break;
+        case 'SRD':
+            $currency_symbol = '$';
+            break;
+        case 'STD':
+            $currency_symbol = 'Db';
+            break;
+        case 'SZL':
+            $currency_symbol = 'E';
+            break;
+        case 'SEK':
+            $currency_symbol = 'kr';
+            break;
+        case 'SGD':
+            $currency_symbol = 'S$';
+            break;
+        case 'SHP':
+            $currency_symbol = '£';
+            break;
+        case 'SYP':
+            $currency_symbol = 'ل.س';
+            break;
+        case 'TWD':
+            $currency_symbol = 'NT$';
+            break;
+        case 'TZS':
+            $currency_symbol = 'TSh';
+            break;
+        case 'THB':
+            $currency_symbol = '฿';
+            break;
+        case 'TOP':
+            $currency_symbol = 'T$';
+            break;
+        case 'TTD':
+            $currency_symbol = 'TT$';
+            break;
+        case 'TRY':
+            $currency_symbol = '₺';
+            break;
+        case 'TJS':
+            $currency_symbol = 'SM';
+            break;
+        case 'TOP':
+            $currency_symbol = 'T$';
+            break;
+        case 'TZS':
+            $currency_symbol = 'TSh';
+            break;
+        case 'UAH':
+            $currency_symbol = '₴';
+            break;
+        case 'UGX':
+            $currency_symbol = 'UGX';
+            break;
+        case 'UYU':
+            $currency_symbol = '$U';
+            break;
+        case 'UZS':
+            $currency_symbol = 'сўм';
+            break;
+        case 'VND':
+            $currency_symbol = '₫';
+            break;
+        case 'VUV':
+            $currency_symbol = 'Vt';
+            break;
+        case 'WST':
+            $currency_symbol = 'T';
+            break;
+        case 'XAF':
+            $currency_symbol = 'CFA';
+            break;
+        case 'XCD':
+            $currency_symbol = 'ec$';
+            break;
+        case 'XOF':
+            $currency_symbol = 'CFA';
+            break;
+        case 'XPF':
+            $currency_symbol = 'CFP';
+            break;
+        case 'YER':
+            $currency_symbol = 'ر.ي';
+            break;
+        case 'ZAR':
+            $currency_symbol = 'R';
+            break;
+        case 'ZMW':
+            $currency_symbol = 'ZK';
+            break;
+        // Add any additional currency symbols as needed
+    }
+    return $currency_symbol;
+}
+add_filter( 'woocommerce_currency_symbol', 'cwdp_add_custom_currency_symbols', 10, 2 );
+
+
+
+
+/**
+ * Helper Function: Retrieve User's Country Code from Cloudflare
+ *
+ * Retrieves the user's country code using Cloudflare's IP country header or WooCommerce geolocation.
+ *
+ * @return string ISO 3166-1 alpha-2 country code.
+ */
+function cwdp_get_user_country_code() {
+    if (isset($_SERVER["HTTP_CF_IPCOUNTRY"])) {
+        $country_code = sanitize_text_field($_SERVER["HTTP_CF_IPCOUNTRY"]);
+    } elseif (class_exists('WC_Geolocation')) {
+        // Fallback to WooCommerce's geolocation if Cloudflare header not present
+        $geolocation = WC_Geolocation::geolocate_ip();
+        $country_code = isset($geolocation['country']) ? $geolocation['country'] : 'US';
+        if ($country_code === 'US') {
+            error_log("Custom WooCommerce Dynamic Pricing: Geolocation defaulted to 'US'.");
+        }
+    } else {
+        $country_code = 'US'; // Default to US if neither method is available
+        error_log("Custom WooCommerce Dynamic Pricing: Unable to determine country. Defaulting to 'US'.");
+    }
+
+    return $country_code ? strtoupper($country_code) : 'US';
+}
+
+
+/**
+ * 7. Admin Notices for Plugin Configuration Issues
+ */
+function cwdp_admin_notices() {
+    if (!isset($_SERVER["HTTP_CF_IPCOUNTRY"]) && !class_exists('WC_Geolocation')) {
+        echo '<div class="notice notice-warning is-dismissible">
+            <p><strong>Custom WooCommerce Dynamic Pricing:</strong> Unable to determine user location via Cloudflare or WooCommerce geolocation. Prices default to USD.</p>
+        </div>';
+    }
+}
+add_action('admin_notices', 'cwdp_admin_notices');
+
+/**
+ * 8. Dynamically Set WooCommerce Currency Based on User Location
+ */
+add_filter('woocommerce_currency', 'cwdp_set_currency_based_on_user');
+
+function cwdp_set_currency_based_on_user($currency) {
+    $country_code = cwdp_get_user_country_code();
+    $country_data = cwdp_get_country_data();
+
+	// List of currencies supported by WooPayments
+	$supported_currencies = array(
+		'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN',
+		'BAM', 'BBD', 'BDT', 'BGN', 'BIF', 'BMD', 'BND', 'BOB', 'BRL', 'BSD',
+		'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC',
+		'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ETB', 'EUR', 'FJD',
+		'FKP', 'GBP', 'GEL', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL',
+		'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JMD', 'JPY', 'KES', 'KGS',
+		'KHR', 'KMF', 'KRW', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL',
+		'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MUR', 'MVR', 'MWK',
+		'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'PAB',
+		'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB',
+		'RWF', 'SAR', 'SBD', 'SCR', 'SEK', 'SGD', 'SHP', 'SLE', 'SLL', 'SOS',
+		'SRD', 'STD', 'SZL', 'THB', 'TJS', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS',
+		'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VND', 'VUV', 'WST', 'XAF', 'XCD',
+		'XOF', 'XPF', 'YER', 'ZAR', 'ZMW'
+	);
+	
+    if (isset($country_data[$country_code])) {
+        // Use 'currency_code' directly
+        $currency_code = $country_data[$country_code]['currency_code'];
+
+        if (in_array($currency_code, $supported_currencies)) {
+            error_log("Custom WooCommerce Dynamic Pricing: Setting currency to '{$currency_code}' for country '{$country_code}'.");
+            return $currency_code;
+        } else {
+            // Fallback to base currency if unsupported
+            $default_currency = get_option('woocommerce_currency');
+            error_log("Custom WooCommerce Dynamic Pricing: Currency '{$currency_code}' not supported. Defaulting to base currency '{$default_currency}'.");
+            return $default_currency;
+        }
+    }
+
+    return get_option('woocommerce_currency'); // Default to store's base currency
+}
+
+/**
+ * 9. Adjust Product Prices Based on Country
+ */
+add_filter('woocommerce_product_get_price', 'cwdp_adjust_price_based_on_country', 99, 2);
+add_filter('woocommerce_product_get_regular_price', 'cwdp_adjust_price_based_on_country', 99, 2);
+add_filter('woocommerce_product_variation_get_price', 'cwdp_adjust_price_based_on_country', 99, 2);
+add_filter('woocommerce_product_variation_get_regular_price', 'cwdp_adjust_price_based_on_country', 99, 2);
+
+
+function cwdp_adjust_price_based_on_country($price, $product) {
+    $country_code = cwdp_get_user_country_code();
+    $country_data = cwdp_get_country_data();
+
+    // Get the currency that will be used
+    $currency = get_woocommerce_currency();
+
+    // List of currencies supported by WooPayments
+	$supported_currencies = array(
+		'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN',
+		'BAM', 'BBD', 'BDT', 'BGN', 'BIF', 'BMD', 'BND', 'BOB', 'BRL', 'BSD',
+		'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC',
+		'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ETB', 'EUR', 'FJD',
+		'FKP', 'GBP', 'GEL', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL',
+		'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JMD', 'JPY', 'KES', 'KGS',
+		'KHR', 'KMF', 'KRW', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL',
+		'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MUR', 'MVR', 'MWK',
+		'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'PAB',
+		'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB',
+		'RWF', 'SAR', 'SBD', 'SCR', 'SEK', 'SGD', 'SHP', 'SLE', 'SLL', 'SOS',
+		'SRD', 'STD', 'SZL', 'THB', 'TJS', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS',
+		'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VND', 'VUV', 'WST', 'XAF', 'XCD',
+		'XOF', 'XPF', 'YER', 'ZAR', 'ZMW'
+	);
+
+	
+	
+    if (isset($country_data[$country_code])) {
+        // Use 'currency_code' directly
+        $currency_code = $country_data[$country_code]['currency_code'];
+
+        if (in_array($currency_code, $supported_currencies)) {
+            // Currency is supported; adjust the price
+            $exchange_rate = $country_data[$country_code]['exchangeRate'];
+            $standard_rate = $country_data[$country_code]['standardRate'];
+
+            // Apply exchange rate and standard rate
+            $adjusted_price = $price * $exchange_rate * $standard_rate;
+
+            // Get number of decimals for the currency
+            $decimals = cwdp_get_currency_decimals($currency_code);
+
+            // Proper rounding based on currency decimals
+            $adjusted_price = round($adjusted_price, $decimals);
+
+            // Ensure price is not negative
+            $adjusted_price = max($adjusted_price, 0);
+
+            // Log the price adjustment
+            error_log("Custom WooCommerce Dynamic Pricing: Adjusted price for country '{$country_code}' from {$price} to {$adjusted_price}.");
+
+            return $adjusted_price;
+        } else {
+            // Currency is not supported; do not adjust the price
+            error_log("Custom WooCommerce Dynamic Pricing: Currency '{$currency_code}' not supported. Price adjustment skipped.");
+            return $price;
+        }
+    }
+
+    return $price;
+}
+
+
+
+// Apply the function to modify product prices
+add_filter('woocommerce_product_get_price', 'cwdp_adjust_price_based_on_country', 99, 2);
+add_filter('woocommerce_product_get_regular_price', 'cwdp_adjust_price_based_on_country', 99, 2);
+add_filter('woocommerce_product_variation_get_price', 'cwdp_adjust_price_based_on_country', 99, 2);
+add_filter('woocommerce_product_variation_get_regular_price', 'cwdp_adjust_price_based_on_country', 99, 2);
+
+
+
+
+
+/**
+ * Helper function to get the number of decimals for a currency
+ */
+function cwdp_get_currency_decimals($currency_code) {
+    $zero_decimal_currencies = array(
+        'BIF', 'CLP', 'DJF', 'GNF', 'ISK', 'JPY', 'KMF',
+        'KRW', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF',
+        'XOF', 'XPF'
+    );
+
+    return in_array($currency_code, $zero_decimal_currencies) ? 0 : 2;
+}
+/**
+ * 10. Format Price Display without Suffixes or Abbreviations
+ *
+ * Ensures that prices are displayed correctly without modifying the currency symbol.
+ */
+add_filter('woocommerce_get_price_html', 'cwdp_format_price_html_custom', 100, 2);
+
+function cwdp_format_price_html_custom($price_html, $product) {
+    // Retrieve the current currency set by WooCommerce
+    $currency_code = get_woocommerce_currency();
+    $decimals = cwdp_get_currency_decimals($currency_code);
+
+    // Get the adjusted price based on country
+    $price = wc_get_price_to_display($product, array('price' => $product->get_price()));
+
+    // Format the price manually without additional HTML
+    $formatted_price = number_format($price, $decimals, get_option('woocommerce_price_decimal_sep'), get_option('woocommerce_price_thousand_sep'));
+
+    // Get the currency symbol
+    $currency_symbol = get_woocommerce_currency_symbol($currency_code);
+
+    // Combine currency symbol and price
+    $final_price = $currency_symbol . $formatted_price;
+
+    // Log the formatted price for debugging
+    error_log("Custom WooCommerce Dynamic Pricing: Formatted price for currency '{$currency_code}': {$final_price}");
+
+    return $final_price;
+}
+
+/**
+ * 11. Ensure WooPayments Processes Payments in Supported Currencies
+ */
+function cwdp_ensure_woopayments_supported_currency($currency) {
+    // List of currencies supported by WooPayments
+	$supported_currencies = array(
+		'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN',
+		'BAM', 'BBD', 'BDT', 'BGN', 'BIF', 'BMD', 'BND', 'BOB', 'BRL', 'BSD',
+		'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC',
+		'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ETB', 'EUR', 'FJD',
+		'FKP', 'GBP', 'GEL', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL',
+		'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JMD', 'JPY', 'KES', 'KGS',
+		'KHR', 'KMF', 'KRW', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL',
+		'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MUR', 'MVR', 'MWK',
+		'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'PAB',
+		'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB',
+		'RWF', 'SAR', 'SBD', 'SCR', 'SEK', 'SGD', 'SHP', 'SLE', 'SLL', 'SOS',
+		'SRD', 'STD', 'SZL', 'THB', 'TJS', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS',
+		'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VND', 'VUV', 'WST', 'XAF', 'XCD',
+		'XOF', 'XPF', 'YER', 'ZAR', 'ZMW'
+	);
+
+    if (!in_array($currency, $supported_currencies)) {
+        $default_currency = get_option('woocommerce_currency');
+        error_log("Custom WooCommerce Dynamic Pricing: WooPayments does not support '{$currency}'. Defaulting to base currency '{$default_currency}'.");
+        return $default_currency;
+    }
+
+    return $currency;
+}
+add_filter('woocommerce_currency', 'cwdp_ensure_woopayments_supported_currency', 20);
+
+
+/**
+ * 1. Define Additional Stripe Payment Methods per Country
+ *
+ * Maps ISO 3166-1 alpha-2 country codes to additional Stripe payment method IDs.
+ *
+ * @return array Associative array of country codes to payment method IDs.
+ */
+function cwdp_get_additional_stripe_payment_methods_by_country() {
+    return array(
+        'AT' => array('stripe_eps'),          // EPS - Austria
+        'BE' => array('stripe_bancontact'),   // Bancontact - Belgium
+        'NL' => array('stripe_ideal'),        // iDEAL - Netherlands
+        'PL' => array('stripe_p24'),          // Przelewy24 - Poland
+        'PT' => array('stripe_multibanco'),   // Multibanco - Portugal
+    );
+}
+
+/**
+ * 2. Define Supported Currencies for PayPal
+ *
+ * Lists currencies supported by PayPal.
+ *
+ * @return array Array of supported currency codes.
+ */
+function cwdp_get_paypal_supported_currencies() {
+    return array(
+        'AUD', // Australian dollar
+        'BRL', // Brazilian real
+        'CAD', // Canadian dollar
+        'CNY', // Chinese Renminbi
+        'CZK', // Czech koruna
+        'DKK', // Danish krone
+        'EUR', // Euro
+        'HKD', // Hong Kong dollar
+        'HUF', // Hungarian forint
+        'ILS', // Israeli new shekel
+        'JPY', // Japanese yen
+        'MYR', // Malaysian ringgit
+        'MXN', // Mexican peso
+        'TWD', // New Taiwan dollar
+        'NZD', // New Zealand dollar
+        'NOK', // Norwegian krone
+        'PHP', // Philippine peso
+        'PLN', // Polish złoty
+        'GBP', // Pound sterling
+        'SGD', // Singapore dollar
+        'SEK', // Swedish krona
+        'CHF', // Swiss franc
+        'THB', // Thai baht
+        'USD', // United States dollar
+    );
+}
+
+/**
+ * 3. Filter Available Payment Gateways Based on Country and Currency
+ *
+ * Ensures that Stripe is always available, PayPal is conditionally available based on currency,
+ * and specific Stripe payment methods are conditionally available based on the user's country.
+ *
+ * @param array $available_gateways Array of available payment gateways.
+ * @return array Modified array of available payment gateways.
+ */
+add_filter('woocommerce_available_payment_gateways', 'cwdp_filter_payment_gateways');
+
+function cwdp_filter_payment_gateways($available_gateways) {
+    if (!is_checkout()) {
+        return $available_gateways;
+    }
+
+    // Retrieve the store's current currency
+    $currency = get_woocommerce_currency();
+
+    // Define the list of currencies that support PayPal
+    $paypal_supported_currencies = cwdp_get_paypal_supported_currencies();
+
+    // Retrieve the user's country code
+    $country_code = cwdp_get_user_country_code();
+
+    // Get the additional Stripe payment methods for the user's country
+    $additional_stripe_methods = cwdp_get_additional_stripe_payment_methods_by_country();
+
+    // Initialize an array to hold the final set of available gateways
+    $final_gateways = array();
+
+    // 3.a. Always include Stripe
+    if (isset($available_gateways['stripe'])) {
+        $final_gateways['stripe'] = $available_gateways['stripe'];
+        // Log inclusion
+        error_log("Custom WooCommerce Dynamic Pricing: Included default gateway 'stripe'.");
+    } else {
+        // Log missing Stripe gateway
+        error_log("Custom WooCommerce Dynamic Pricing: Default gateway 'stripe' is not available.");
+    }
+
+    // 3.b. Conditionally include PayPal if currency is supported
+    if (in_array($currency, $paypal_supported_currencies)) {
+        if (isset($available_gateways['ppcp-gateway'])) {
+            $final_gateways['ppcp-gateway'] = $available_gateways['ppcp-gateway'];
+            // Log inclusion
+            error_log("Custom WooCommerce Dynamic Pricing: Included PayPal ('ppcp-gateway') for currency '{$currency}'.");
+        } else {
+            // Log missing PayPal gateway
+            error_log("Custom WooCommerce Dynamic Pricing: PayPal ('ppcp-gateway') is not available.");
+        }
+    } else {
+        // Log exclusion of PayPal due to unsupported currency
+        error_log("Custom WooCommerce Dynamic Pricing: Excluded PayPal ('ppcp-gateway') for unsupported currency '{$currency}'.");
+    }
+
+    // 3.c. Add additional Stripe payment methods based on the user's country
+    if (isset($additional_stripe_methods[$country_code])) {
+        foreach ($additional_stripe_methods[$country_code] as $extra_gateway_id) {
+            if (isset($available_gateways[$extra_gateway_id])) {
+                $final_gateways[$extra_gateway_id] = $available_gateways[$extra_gateway_id];
+                // Log inclusion
+                error_log("Custom WooCommerce Dynamic Pricing: Included additional gateway '{$extra_gateway_id}' for country '{$country_code}'.");
+            } else {
+                // Log missing additional gateway
+                error_log("Custom WooCommerce Dynamic Pricing: Additional gateway '{$extra_gateway_id}' for country '{$country_code}' is not available.");
+            }
+        }
+    }
+
+    // Assign the final gateways
+    $available_gateways = $final_gateways;
+
+    // Log the final available gateways
+    error_log('Custom WooCommerce Dynamic Pricing: Final available gateways: ' . implode(', ', array_keys($available_gateways)));
+
+    // If no payment gateways are available after filtering, display an error notice
+    if (empty($available_gateways)) {
+        wc_add_notice(__('No payment methods are available for your location and currency. Please contact us for assistance.', 'woocommerce'), 'error');
+    }
+
+    return $available_gateways;
+}
+
+/**
+ * 4. Enqueue Custom JavaScript to Force Display of Multibanco
+ *
+ * Ensures that Multibanco is visible for users in Portugal.
+ */
+add_action('wp_enqueue_scripts', 'cwdp_enqueue_custom_scripts');
+
+function cwdp_enqueue_custom_scripts() {
+    if (is_checkout()) {
+        $country_code = cwdp_get_user_country_code();
+        if ($country_code === 'PT') {
+            wp_add_inline_script('wc-checkout', '
+                jQuery(document).ready(function($) {
+                    $(".payment_method_stripe_multibanco").show();
+                    $(".payment_method_stripe_multibanco input").prop("checked", false);
+                });
+            ');
+        }
+    }
+}
+
+
+
+function cwdp_enqueue_custom_bump_sell_js() {
+    if ( is_checkout() ) { // Ensure the script runs only on the checkout page
+        ?>
+        <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            /**
+             * Function to add a space between the currency symbol and the price
+             */
+            function addSpaceToBumpSellPrices() {
+                $('.vi-wcuf-ob-price').each(function() {
+                    var htmlContent = $(this).html().trim();
+
+                    // Skip if a space or non-breaking space already exists
+                    if (htmlContent.includes(' ') || htmlContent.includes('&nbsp;')) {
+                        return; // Already formatted
+                    }
+
+                    // Use regex to split currency symbol and amount
+                    // This regex captures all non-digit characters at the start and the rest as the amount
+                    var regex = /^(\D+)([\d.,]+)/u;
+                    var matches = htmlContent.match(regex);
+
+                    if (matches) {
+                        var symbol = matches[1];
+                        var amount = matches[2];
+                        // Insert a non-breaking space between symbol and amount
+                        var newHtml = symbol + '&nbsp;' + amount;
+                        $(this).html(newHtml);
+                    }
+                });
+            }
+
+            // Initial call to format existing bump-sell prices
+            addSpaceToBumpSellPrices();
+
+            /**
+             * Observe DOM changes to handle dynamically loaded bump-sell elements
+             */
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.addedNodes.length) {
+                        addSpaceToBumpSellPrices();
+                    }
+                });
+            });
+
+            // Configuration of the observer:
+            var config = { childList: true, subtree: true };
+
+            // Target specific container to reduce overhead
+            var targetNode = document.querySelector('.viwcuf-checkout-ob-container');
+            if (targetNode) {
+                observer.observe(targetNode, config);
+            }
+        });
+        </script>
+        <?php
+    }
+}
+add_action( 'wp_footer', 'cwdp_enqueue_custom_bump_sell_js' );
