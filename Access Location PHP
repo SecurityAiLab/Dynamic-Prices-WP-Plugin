@@ -1,0 +1,14 @@
+add_action('wp_head', 'inject_cf_country_code');
+
+function inject_cf_country_code() {
+    if (isset($_SERVER["HTTP_CF_IPCOUNTRY"])) {
+        $country_code = sanitize_text_field($_SERVER["HTTP_CF_IPCOUNTRY"]);
+    } else {
+        $country_code = 'US'; // Default to US if not available
+    }
+    ?>
+    <script type="text/javascript">
+        var cfCountryCode = '<?php echo $country_code; ?>';
+    </script>
+    <?php
+}
