@@ -2,7 +2,7 @@ So here's the snippet works
 
 You activate the JS one use: 
 
-<span class="price" data-base-price="$16.97">$16.97</span>
+`<span class="price" data-base-price="$16.97">$16.97</span>`
 
 
 Where data-base-price="$16.97"   is the price that will be changed for currencies, while $16.97 is the default price. It'll automatically be replaced with the corresponding price for each location if both values are the same.
